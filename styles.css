@@ -114,13 +114,13 @@ a { color: inherit; }
 }
 
 .brand-sub {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.7;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.65;
   color: var(--ink-soft);
-  letter-spacing: -0.01em;
-  max-width: 62ch;
-  margin: 16px 0 0;
+  letter-spacing: -0.005em;
+  max-width: 54ch;
+  margin: 14px 0 0;
 }
 
 .header-right { display: flex; align-items: center; gap: 12px; padding-top: 4px; }
