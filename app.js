@@ -92,7 +92,7 @@
   const UI_KEY = "thesis-journal:ui";
   let entries = [];
   const filters = {
-    view: "all",
+    view: "files",
     search: "",
     projects: new Set(),
     tags: new Set(),
@@ -100,6 +100,10 @@
   };
   let calMonth = startOfMonth(new Date());
   let calSelected = null; // ISO date string
+  let filesOrder = "week"; // project | type | tag | week
+  let filesOpenKey = null;
+  let filesLanded = false; // one-shot: auto-open the top folder on first paint
+  let filesFlip = null; // geometry snapshot for the open/close morph
 
   function loadUI() {
     try {
@@ -231,6 +235,8 @@
 
   function matchesView(e) {
     switch (filters.view) {
+      case "files":
+        return true;
       case "all":
         return e.kind !== "journal";
       case "reading":
@@ -347,9 +353,16 @@
     $$("#views .view-btn").forEach((b) =>
       b.classList.toggle("is-active", b.dataset.view === filters.view)
     );
+    document.body.classList.toggle("view-files", filters.view === "files");
 
     const content = $("#content");
     content.innerHTML = "";
+
+    if (filters.view === "files") {
+      renderFiles(content);
+      $("#count").textContent = "";
+      return;
+    }
 
     if (!entries.length) {
       content.innerHTML = `<div class="empty">
@@ -551,6 +564,390 @@
       });
       content.appendChild(grid);
     });
+  }
+
+  /* ---------- files view (folder drawer) ---------- */
+
+  const TAB_X = [3, 24, 44, 9, 33, 50, 6, 28, 15, 40, 1, 46];
+  const TAB_ROT = [-0.5, 0.35, -0.25, 0.5, -0.4, 0.2, -0.35, 0.45, -0.2, 0.3, -0.45, 0.25];
+  const FILE_ORDERS = [
+    ["week", "week"],
+    ["project", "project"],
+    ["type", "type"],
+    ["tag", "tag"],
+  ];
+
+  /* ---- semester: 15 weekly classes, first class Fri 28 Aug 2026 ---- */
+  const TERM_START = "2026-08-28"; // week 1 opens 00:00 this Friday
+  const TERM_WEEKS = 15;
+  const WEEK_MS = 7 * 86400000;
+
+  function termWeekOf(iso) {
+    // 1-based class week a date belongs to (clamped to 1..TERM_WEEKS)
+    const n =
+      Math.floor(
+        (new Date(iso + "T00:00:00") - new Date(TERM_START + "T00:00:00")) /
+          WEEK_MS
+      ) + 1;
+    return Math.max(1, Math.min(TERM_WEEKS, n));
+  }
+  function weeksOpen() {
+    // how many class weeks have started as of now (each opens on its Friday 00:00)
+    const n =
+      Math.floor((Date.now() - new Date(TERM_START + "T00:00:00")) / WEEK_MS) + 1;
+    return Math.max(1, Math.min(TERM_WEEKS, n));
+  }
+  function weekFriday(n) {
+    const d = new Date(TERM_START + "T00:00:00");
+    d.setDate(d.getDate() + (n - 1) * 7);
+    return d;
+  }
+
+  function firstImage(items) {
+    for (const e of items)
+      for (const a of e.attachments || []) if (a.isImage) return a.dataUrl;
+    return null;
+  }
+
+  function buildFolders(order) {
+    const pool = entries.filter(passesCommon); // honour search + project/tag filters
+    const narrowing =
+      !!filters.search.trim() || filters.projects.size || filters.tags.size;
+    let groups = [];
+    if (order === "project") {
+      PROJECTS.forEach((p) =>
+        groups.push({
+          key: p.id,
+          label: p.label,
+          items: pool.filter((e) => (e.projects || []).includes(p.id)),
+          route: () => {
+            filters.projects = new Set([p.id]);
+            filters.tags = new Set();
+            filters.view = "all";
+          },
+        })
+      );
+      const unfiled = pool.filter(
+        (e) => !(e.projects || []).some((x) => PROJECT_LABEL[x])
+      );
+      if (unfiled.length)
+        groups.push({ key: "__none", label: "Unfiled", items: unfiled });
+    } else if (order === "type") {
+      Object.keys(KIND_LABEL).forEach((k) => {
+        groups.push({
+          key: k,
+          label:
+            KIND_LABEL[k] === "Resource" ? "Resources" : KIND_LABEL[k] + "s",
+          items: pool.filter((e) => e.kind === k),
+          route: () => {
+            filters.projects = new Set();
+            filters.tags = new Set();
+            filters.view = ["reading", "website", "image", "document", "journal"].includes(k)
+              ? k
+              : "all";
+          },
+        });
+      });
+    } else if (order === "tag") {
+      [...new Set(pool.flatMap((e) => e.tags || []))]
+        .sort()
+        .forEach((t) =>
+          groups.push({
+            key: t,
+            label: "#" + t,
+            items: pool.filter((e) => (e.tags || []).includes(t)),
+            route: () => {
+              filters.tags = new Set([t]);
+              filters.projects = new Set();
+              filters.view = "all";
+            },
+          })
+        );
+    } else if (order === "week") {
+      const open = weeksOpen();
+      const byWeek = new Map();
+      pool.forEach((e) => {
+        const d = entryDate(e);
+        if (!d) return;
+        const n = Math.min(termWeekOf(d), open);
+        if (!byWeek.has(n)) byWeek.set(n, []);
+        byWeek.get(n).push(e);
+      });
+      for (let n = open; n >= 1; n--) {
+        groups.push({
+          key: "w" + n,
+          label: "Week " + n,
+          sub:
+            weekFriday(n).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+            }) + " · class " + n + "/" + TERM_WEEKS,
+          items: byWeek.get(n) || [],
+          route: null,
+        });
+      }
+      // ghost: the next class week, opens on its Friday
+      if (open < TERM_WEEKS && !narrowing) {
+        groups.unshift({
+          key: "w" + (open + 1),
+          label: "Week " + (open + 1),
+          sub:
+            "opens " +
+            weekFriday(open + 1).toLocaleDateString("en-GB", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            }),
+          items: [],
+          locked: true,
+        });
+      }
+    }
+    if (narrowing) groups = groups.filter((g) => g.items.length);
+    groups.forEach((g) => {
+      g.cover = firstImage(g.items);
+      if (g.sub == null)
+        g.sub =
+          g.items.length + (g.items.length === 1 ? " item" : " items");
+    });
+    return groups;
+  }
+
+  // snapshot every folder tab's on-screen box so the next render can morph from it
+  function snapshotFilesGeom() {
+    const tabs = {};
+    document.querySelectorAll(".files-tab").forEach((t) => {
+      if (t.dataset.key) tabs[t.dataset.key] = t.getBoundingClientRect();
+    });
+    return { tabs };
+  }
+
+  // FLIP: after renderFiles has painted the new layout, slide/scale each tab
+  // back to where it was and let it ease to its new spot — vertical <-> horizontal
+  function flipFiles() {
+    if (!filesFlip) return;
+    const prev = filesFlip;
+    filesFlip = null;
+    const tabs = [...document.querySelectorAll(".files-tab")];
+    const face = document.querySelector(".files-face");
+    let moved = false;
+
+    tabs.forEach((t) => {
+      const o = prev.tabs[t.dataset.key];
+      if (!o) return;
+      const n = t.getBoundingClientRect();
+      if (!n.width || !n.height) return;
+      const dx = o.left - n.left;
+      const dy = o.top - n.top;
+      const sx = o.width / n.width;
+      const sy = o.height / n.height;
+      if (
+        Math.abs(dx) < 1 &&
+        Math.abs(dy) < 1 &&
+        Math.abs(sx - 1) < 0.02 &&
+        Math.abs(sy - 1) < 0.02
+      )
+        return;
+      moved = true;
+      const inner = t.querySelector(".ff-tab");
+      t.style.transition = "none";
+      t.style.transformOrigin = "top left";
+      t.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+      if (inner) {
+        inner.style.transition = "none";
+        inner.style.transform = `scale(${1 / sx}, ${1 / sy})`;
+      }
+    });
+
+    if (face) {
+      face.style.transition = "none";
+      face.style.opacity = "0";
+      face.style.transform = "translateY(10px)";
+    }
+    if (!moved && !face) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const ease = "cubic-bezier(.45,0,.15,1)";
+        tabs.forEach((t) => {
+          const inner = t.querySelector(".ff-tab");
+          t.style.transition = `transform .44s ${ease}`;
+          t.style.transform = "";
+          if (inner) {
+            inner.style.transition = `transform .44s ${ease}`;
+            inner.style.transform = "";
+          }
+        });
+        if (face) {
+          face.style.transition =
+            "opacity .34s ease .08s, transform .34s ease .08s";
+          face.style.opacity = "";
+          face.style.transform = "";
+        }
+      });
+    });
+
+    setTimeout(() => {
+      tabs.forEach((t) => {
+        t.style.transition = "";
+        t.style.transform = "";
+        t.style.transformOrigin = "";
+        const inner = t.querySelector(".ff-tab");
+        if (inner) {
+          inner.style.transition = "";
+          inner.style.transform = "";
+        }
+      });
+      if (face) {
+        face.style.transition = "";
+        face.style.opacity = "";
+        face.style.transform = "";
+      }
+    }, 580);
+  }
+
+  function renderFiles(content) {
+    const view = document.createElement("div");
+    view.className = "files-view";
+
+    const barWrap = document.createElement("div");
+    barWrap.className = "files-orders-wrap";
+    const bar = document.createElement("div");
+    bar.className = "files-orders";
+    bar.innerHTML =
+      `<span class="files-orders-label">file by</span>` +
+      FILE_ORDERS.map(
+        ([k, lbl]) =>
+          `<button class="files-order-btn${
+            filesOrder === k ? " is-on" : ""
+          }" data-order="${k}">${lbl}</button>`
+      ).join("");
+    bar.querySelectorAll("[data-order]").forEach((b) => {
+      b.onclick = () => {
+        filesOrder = b.dataset.order;
+        filesOpenKey = null;
+        render();
+      };
+    });
+    barWrap.appendChild(bar);
+    view.appendChild(barWrap);
+
+    const folders = buildFolders(filesOrder);
+
+    if (!folders.length) {
+      const empty = document.createElement("div");
+      empty.className = "files-empty-wrap";
+      empty.innerHTML = filters.search.trim()
+        ? `<p class="files-none">Nothing in the file matches “${esc(
+            filters.search.trim()
+          )}”.</p>`
+        : `<div class="empty">
+        <h3>The file is empty</h3>
+        <p>Add a reading, a link, an image or this week's line — it drops into a folder here on its own.</p>
+        <button class="add-btn" onclick="document.getElementById('addBtn').click()">Start the file</button>
+      </div>`;
+      view.appendChild(empty);
+      content.appendChild(view);
+      return;
+    }
+
+    const real = folders.filter((g) => !g.locked);
+    const opened = real.find((g) => g.key === filesOpenKey) || null;
+    if (!opened) filesOpenKey = null;
+    const current = opened || real[0] || folders[0];
+    const currentIdx = folders.indexOf(current);
+
+    // ---- the folders: a vertical stack of bands, or a top row once one is opened ----
+    const tabrow = document.createElement("div");
+    tabrow.className = "files-tabrow" + (opened ? " is-open" : "");
+    folders.forEach((g, i) => {
+      const t = document.createElement("button");
+      t.type = "button";
+      t.className =
+        "files-tab tone-" +
+        (i % 10) +
+        (g === current ? " is-current" : "") +
+        (g.locked ? " is-locked" : "") +
+        (g.cover ? " has-cover" : "");
+      t.style.setProperty("--tab-x", TAB_X[i % TAB_X.length] + "%");
+      t.style.setProperty(
+        "--rot",
+        (opened && g === current ? 0 : TAB_ROT[i % TAB_ROT.length]) + "deg"
+      );
+      t.style.zIndex = g.locked ? 1 : opened && g === current ? 60 : i + 2;
+      t.dataset.key = g.key;
+      if (g.cover) t.style.setProperty("--cover", `url("${g.cover}")`);
+      t.innerHTML = `<span class="ff-tab"><span class="ft-name">${esc(
+        g.label
+      )}</span><span class="ft-sub">${esc(g.sub)}</span></span>`;
+      if (!g.locked)
+        t.onclick = () => {
+          filesFlip = snapshotFilesGeom();
+          filesOpenKey = filesOpenKey === g.key ? null : g.key;
+          render();
+        };
+      tabrow.appendChild(t);
+    });
+    view.appendChild(tabrow);
+
+    if (!opened) {
+      content.appendChild(view);
+      flipFiles();
+      return;
+    }
+
+    // ---- opened folder: one full-page face with its contents ----
+    const face = document.createElement("div");
+    face.className = "files-face tone-" + (currentIdx % 10);
+    if (current.cover) {
+      face.classList.add("has-cover");
+      face.style.setProperty("--cover", `url("${current.cover}")`);
+    }
+    face.innerHTML = `
+      <div class="fp-head">
+        <span class="fp-name">${esc(current.label)}</span>
+        <span class="fp-sub">${esc(current.sub)}</span>
+      </div>
+      <div class="fp-sheet"></div>`;
+    const sheet = face.querySelector(".fp-sheet");
+
+    if (!current.items.length) {
+      sheet.innerHTML = `<p class="folder-empty">Nothing filed in this ${
+        filesOrder === "week" ? "week" : "folder"
+      } yet.</p>`;
+    } else {
+      const paper = document.createElement("div");
+      paper.className = "folder-sheet";
+      sortEntries(current.items).forEach((e) => {
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "folder-item";
+        row.innerHTML = `<span class="fi-kind">${esc(
+          KIND_LABEL[e.kind] || ""
+        )}</span><span class="fi-title">${esc(
+          e.title || "Untitled"
+        )}</span><span class="fi-date">${esc(fmtDate(entryDate(e)))}</span>`;
+        row.onclick = () => openModal(e);
+        paper.appendChild(row);
+      });
+      if (current.route) {
+        const all = document.createElement("button");
+        all.type = "button";
+        all.className = "folder-seeall";
+        all.textContent = "Open in the list →";
+        all.onclick = () => {
+          current.route();
+          saveUI();
+          render();
+        };
+        paper.appendChild(all);
+      }
+      sheet.appendChild(paper);
+    }
+    view.appendChild(face);
+
+    content.appendChild(view);
+    flipFiles();
   }
 
   /* ---------- calendar ---------- */

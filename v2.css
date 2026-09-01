@@ -1,0 +1,76 @@
+/* ============================================================
+   Thesis Journal — v2 theme
+   ONE colour: deep teal (#13473A). Nothing but its tints and shades.
+   Loads after styles.css.
+   ============================================================ */
+
+:root {
+  --bg: #eef3f0;          /* lightest tint */
+  --bg-raise: #e2ece7;
+  --ink: #0c2e26;         /* darkest shade */
+  --head: #13473a;        /* the colour */
+  --ink-soft: #4b6e64;
+  --ink-faint: #93aaa2;
+  --line: #d0e0da;
+  --line-strong: #b2ccc3;
+  --accent: #13473a;
+  --accent-ink: #eef3f0;
+  --accent-soft: #dce9e4;
+  --danger: #13473a;
+  --focus: #13473a;
+
+  /* the same teal, darkest → lightest */
+  --f0: #0c2e26;  --f0-ink: #cfe3dd;
+  --f1: #123f34;  --f1-ink: #d7e8e2;
+  --f2: #13473a;  --f2-ink: #eef3f0;
+  --f3: #35695c;  --f3-ink: #eef3f0;
+  --f4: #5d8a7d;  --f4-ink: #08251e;
+  --f5: #8fb0a6;  --f5-ink: #0c2e26;
+  --f6: #b8d0c8;  --f6-ink: #0f382e;
+  --f7: #d7e6e0;  --f7-ink: #143f34;
+  --f8: #e6efeb;  --f8-ink: #16463a;
+  --f9: #f1f6f3;  --f9-ink: #1a4b3e;
+}
+
+/* pull cover images into the one hue too */
+.files-folder.has-cover .folder-tab,
+.files-folder.has-cover .folder-body {
+  background-color: #13473a;
+  background-blend-mode: luminosity;
+}
+.files-folder.has-cover .folder-tab::before {
+  background: linear-gradient(90deg, rgba(8, 37, 30, 0.82), rgba(8, 37, 30, 0.28));
+}
+
+:root[data-theme="dark"] {
+  --bg: #071a15;
+  --bg-raise: #0d2620;
+  --ink: #dcece6;
+  --head: #6fb39f;
+  --ink-soft: #9cbcb2;
+  --ink-faint: #5c7d73;
+  --line: #16332b;
+  --line-strong: #234a3f;
+  --accent: #6fb39f;
+  --accent-ink: #071a15;
+  --accent-soft: #10261f;
+  --danger: #6fb39f;
+  --focus: #6fb39f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #071a15;
+    --bg-raise: #0d2620;
+    --ink: #dcece6;
+    --head: #6fb39f;
+    --ink-soft: #9cbcb2;
+    --ink-faint: #5c7d73;
+    --line: #16332b;
+    --line-strong: #234a3f;
+    --accent: #6fb39f;
+    --accent-ink: #071a15;
+    --accent-soft: #10261f;
+    --danger: #6fb39f;
+    --focus: #6fb39f;
+  }
+}
