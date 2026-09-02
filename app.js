@@ -104,6 +104,7 @@
   let filesOpenKey = null;
   let filesLanded = false; // one-shot: auto-open the top folder on first paint
   let filesFlip = null; // geometry snapshot for the open/close morph
+  let filesTabSeed = Math.floor(Math.random() * 1e9); // reshuffles tab x-positions per load
 
   function loadUI() {
     try {
@@ -568,8 +569,32 @@
 
   /* ---------- files view (folder drawer) ---------- */
 
-  const TAB_X = [3, 24, 44, 9, 33, 50, 6, 28, 15, 40, 1, 46];
   const TAB_ROT = [-0.5, 0.35, -0.25, 0.5, -0.4, 0.2, -0.35, 0.45, -0.2, 0.3, -0.45, 0.25];
+
+  // spread the folder tabs right across the drawer, scattered (not left-to-right),
+  // re-scattered whenever the folder count changes (new week / new folder) or the
+  // page reloads — seed folds in the order + count + the per-load random.
+  function tabPositions(n, order) {
+    if (n <= 1) return [8];
+    let oh = 0;
+    for (let k = 0; k < order.length; k++)
+      oh = (oh * 131 + order.charCodeAt(k)) >>> 0;
+    let s = (filesTabSeed + n * 2654435761 + oh * 40503) >>> 0;
+    const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+    const lo = 2,
+      hi = 82; // percent range for the tab's left edge
+    const slots = [];
+    for (let i = 0; i < n; i++) slots.push(lo + ((hi - lo) * i) / (n - 1));
+    // Fisher–Yates on the evenly-spaced slots → full-width but shuffled
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      const t = slots[i];
+      slots[i] = slots[j];
+      slots[j] = t;
+    }
+    // nudge each a little so it never looks like a fixed grid
+    return slots.map((x) => Math.max(lo, Math.min(hi, x + (rand() - 0.5) * 6)));
+  }
   const FILE_ORDERS = [
     ["week", "week"],
     ["project", "project"],
@@ -860,6 +885,7 @@
     // ---- the folders: a vertical stack of bands, or a top row once one is opened ----
     const tabrow = document.createElement("div");
     tabrow.className = "files-tabrow" + (opened ? " is-open" : "");
+    const tabX = tabPositions(folders.length, filesOrder);
     folders.forEach((g, i) => {
       const t = document.createElement("button");
       t.type = "button";
@@ -869,7 +895,7 @@
         (g === current ? " is-current" : "") +
         (g.locked ? " is-locked" : "") +
         (g.cover ? " has-cover" : "");
-      t.style.setProperty("--tab-x", TAB_X[i % TAB_X.length] + "%");
+      t.style.setProperty("--tab-x", tabX[i].toFixed(1) + "%");
       t.style.setProperty(
         "--rot",
         (opened && g === current ? 0 : TAB_ROT[i % TAB_ROT.length]) + "deg"

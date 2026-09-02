@@ -1063,29 +1063,45 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   width: 100%;
   padding: 0;
   border: 0;
+  border-radius: 12px 12px 0 0;     /* top corners round, base straight — like a file */
   background: var(--bgc);            /* the full-width band */
   color: var(--fg);
   cursor: pointer;
   overflow: visible;
   transition:
     flex-grow 0.34s ease, flex-basis 0.34s ease, min-height 0.34s ease,
-    margin 0.34s ease, padding 0.3s ease, opacity 0.24s ease;
+    margin 0.34s ease, padding 0.3s ease, opacity 0.24s ease,
+    transform 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), filter 0.26s ease,
+    border-radius 0.26s ease;
 }
 .files-tab.is-locked { min-height: 0; }   /* the ghost is just its dashed tab */
-.files-tab:hover { filter: brightness(1.05); }
 /* the last real band fills the remaining screen so it reaches the bottom */
 .files-tabrow:not(.is-open) .files-tab:last-of-type { flex: 1 1 auto; }
+/* rest stack: overlap the bands so each rounded top tucks under the one above (no paper gaps) */
+.files-tabrow:not(.is-open) .files-tab { margin-top: -12px; }
+.files-tabrow:not(.is-open) .files-tab:first-of-type,
+.files-tabrow:not(.is-open) .files-tab.is-locked + .files-tab { margin-top: 0; }
+/* hover = lift the whole folder (band + its tab) out of the drawer, together */
+.files-tabrow:not(.is-open) .files-tab:hover {
+  transform: translateY(-10px);
+  border-radius: 14px 14px 0 0;
+  filter: brightness(1.03) drop-shadow(0 8px 18px rgba(22, 16, 28, 0.3));
+}
+.files-tabrow:not(.is-open) .files-tab.is-locked:hover {
+  transform: none;
+  filter: none;
+}
 
 /* the tab that pokes up above the band */
 .ff-tab {
   position: absolute;
   left: max(2%, min(var(--tab-x, 4%), calc(100% - 216px)));  /* never let the label run off the edge */
   bottom: 100%;                      /* sits directly on top of the band */
-  margin-bottom: -1px;
+  margin-bottom: -1px;               /* base flush with the band top */
   max-width: min(72%, calc(100% - 16px));
   overflow: hidden;
-  padding: 6px 20px 10px;
-  border-radius: 15px 15px 0 0;
+  padding: 6px 20px 11px;
+  border-radius: 14px 14px 0 0;      /* top corners round, base straight */
   background: var(--bgc);
   color: var(--fg);
   display: flex;
@@ -1094,12 +1110,13 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   white-space: nowrap;
   transform: rotate(var(--rot, 0deg));
   transform-origin: bottom left;
-  transition: left 0.32s ease, padding 0.3s ease, border-radius 0.3s ease, transform 0.2s ease;
+  transition: left 0.32s ease, padding 0.3s ease, border-radius 0.3s ease;
 }
 .files-tab.is-locked .ff-tab {
   background: none;
   border: 1px dashed var(--line-strong);
   border-bottom: 0;
+  border-radius: 14px 14px 0 0;
   color: var(--ink-faint);
   opacity: 0.7;
 }
@@ -1123,13 +1140,16 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   max-width: none;
   width: 100%;
   padding: 9px 16px 12px;
-  border-radius: 14px 14px 0 0;
+  border-radius: 13px 13px 0 0;
   transform: none;
   opacity: 0.72;
   overflow: hidden;
 }
 .files-tabrow.is-open .files-tab:first-child .ff-tab { margin-left: 0; }
-.files-tabrow.is-open .files-tab:hover .ff-tab { opacity: 0.95; }
+.files-tabrow.is-open .files-tab:hover .ff-tab {
+  opacity: 0.95;
+  transform: translateY(-4px);
+}
 .files-tabrow.is-open .files-tab.is-current { z-index: 60; flex-grow: 1.5; }
 .files-tabrow.is-open .files-tab.is-current .ff-tab {
   opacity: 1;
