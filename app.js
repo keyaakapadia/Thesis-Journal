@@ -729,8 +729,10 @@
       }
     }
     if (narrowing) groups = groups.filter((g) => g.items.length);
+    const AXIS = { project: "project", type: "type" };
     groups.forEach((g) => {
       g.cover = firstImage(g.items);
+      if (!g.locked) g.axis = AXIS[order] || "";
       if (g.sub == null)
         g.sub =
           g.items.length + (g.items.length === 1 ? " item" : " items");
@@ -905,7 +907,9 @@
       if (g.cover) t.style.setProperty("--cover", `url("${g.cover}")`);
       t.innerHTML = `<span class="ff-tab"><span class="ft-name">${esc(
         g.label
-      )}</span><span class="ft-sub">${esc(g.sub)}</span></span>`;
+      )}</span>${
+        g.axis ? `<span class="ft-axis">${esc(g.axis)}</span>` : ""
+      }<span class="ft-sub">${esc(g.sub)}</span></span>`;
       if (!g.locked)
         t.onclick = () => {
           filesFlip = snapshotFilesGeom();

@@ -1129,32 +1129,35 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   padding: 0 2px;
 }
 .files-tabrow.is-open .files-tab {
-  flex: 1 1 0;
+  flex: 0 0 auto;                    /* width follows the label, not an equal share */
+  width: auto;                      /* override the base 100% so the tab hugs its text */
   min-width: 0;
   min-height: 0;
+  max-width: 44%;
   background: none;
 }
 .files-tabrow.is-open .ff-tab {
   position: static;
-  margin: 0 0 0 -10px;
+  margin: 0 3px 0 0;                 /* sit next to each other, no overlap */
   max-width: none;
-  width: 100%;
-  padding: 9px 16px 12px;
+  width: auto;                       /* hug the text */
+  padding: 9px 15px 12px;
   border-radius: 13px 13px 0 0;
   transform: none;
-  opacity: 0.72;
+  opacity: 1;                        /* every tab full strength, selected or not */
   overflow: hidden;
 }
-.files-tabrow.is-open .files-tab:first-child .ff-tab { margin-left: 0; }
 .files-tabrow.is-open .files-tab:hover .ff-tab {
-  opacity: 0.95;
   transform: translateY(-4px);
 }
-.files-tabrow.is-open .files-tab.is-current { z-index: 60; flex-grow: 1.5; }
+.files-tabrow.is-open .files-tab.is-current { z-index: 60; }
 .files-tabrow.is-open .files-tab.is-current .ff-tab {
-  opacity: 1;
-  box-shadow: 0 -8px 20px -12px rgba(20, 20, 30, 0.4);
+  position: relative;
+  z-index: 2;
+  transform: translateY(5px);       /* laps onto the face — tab + folder body read as one piece */
+  box-shadow: none;
 }
+.files-tabrow.is-open .files-tab.is-current:hover .ff-tab { transform: translateY(5px); }
 .files-tabrow.is-open .ff-tab .ft-sub { display: none; }
 
 .files-tab.has-cover {
@@ -1194,6 +1197,18 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* the axis word ("project" / "type"), shown beside the label once a tab is opened */
+.ft-axis {
+  display: none;
+  flex: 0 0 auto;
+  margin-left: -5px;                 /* tighten the gap the label's flex `gap` leaves */
+  font-size: 8px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.55;
+}
+.files-tabrow.is-open .ff-tab .ft-axis { display: block; }
 
 /* ---- the current folder: one full-page face that covers everything ---- */
 .files-face {
@@ -1294,9 +1309,9 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   /* rest state: vertical bands scroll if there are many */
   .files-tabrow { overflow-y: auto; }
   .files-tabrow .files-tab { flex: 0 0 auto; min-height: 68px; }
-  /* open state: the top row scrolls sideways */
+  /* open state: tabs still hug their text; the row scrolls sideways if they overrun */
   .files-tabrow.is-open { overflow-x: auto; overflow-y: visible; }
-  .files-tabrow.is-open .files-tab { flex: 0 0 auto; min-width: 42%; }
+  .files-tabrow.is-open .files-tab { min-width: 0; max-width: 70%; }
 }
 
 /* ---------- Footer ---------- */
