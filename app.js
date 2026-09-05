@@ -1389,27 +1389,12 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
-  async function importData(file) {
-    let data;
-    try {
-      data = JSON.parse(await file.text());
-    } catch (e) {
-      alert("That file isn't valid JSON.");
-      return;
-    }
+  // merge a {entries, statusLog} snapshot in — entries with a matching id are
+  // overwritten, everything else already local is left untouched. Shared by
+  // the manual Import button and the automatic local-file sync below.
+  async function mergeSnapshot(data) {
     const incoming = Array.isArray(data) ? data : data.entries;
-    if (!Array.isArray(incoming)) {
-      alert("Couldn't find any entries in that file.");
-      return;
-    }
-    if (
-      !confirm(
-        `Import ${incoming.length} ${
-          incoming.length === 1 ? "entry" : "entries"
-        }? Entries with the same id are overwritten; everything else is kept.`
-      )
-    )
-      return;
+    if (!Array.isArray(incoming)) return 0;
 
     for (const raw of incoming) {
       if (!raw || !raw.id) continue;
@@ -1451,6 +1436,32 @@
       renderStatus();
     }
 
+    return incoming.length;
+  }
+
+  async function importData(file) {
+    let data;
+    try {
+      data = JSON.parse(await file.text());
+    } catch (e) {
+      alert("That file isn't valid JSON.");
+      return;
+    }
+    const incoming = Array.isArray(data) ? data : data.entries;
+    if (!Array.isArray(incoming)) {
+      alert("Couldn't find any entries in that file.");
+      return;
+    }
+    if (
+      !confirm(
+        `Import ${incoming.length} ${
+          incoming.length === 1 ? "entry" : "entries"
+        }? Entries with the same id are overwritten; everything else is kept.`
+      )
+    )
+      return;
+
+    await mergeSnapshot(data);
     render();
     scheduleSync();
   }
@@ -1804,8 +1815,11 @@
 
   // Read-only bootstrap: if there's a data.json next to the page and nothing
   // stored yet, load it (lets a hosted copy show entries with no token).
+  // pull data.json in on every load, not just when local storage is empty —
+  // whoever is editing the file (you, or me on your behalf) shows up here by
+  // default with no Import click needed. Same safe merge as the Import
+  // button: entries with a matching id are overwritten, nothing local is lost.
   async function bootstrapFromFile() {
-    if (entries.length || statusLog.length) return;
     try {
       const r = await fetch("data.json", { cache: "no-store" });
       if (!r.ok) return;
@@ -1814,7 +1828,8 @@
         data &&
         ((data.entries || []).length || (data.statusLog || []).length)
       ) {
-        await applySnapshot(data);
+        await mergeSnapshot(data);
+        render();
       }
     } catch (e) {}
   }
