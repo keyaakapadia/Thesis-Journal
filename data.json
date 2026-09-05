@@ -1,7 +1,22 @@
 {
   "app": "thesis-journal",
   "version": 3,
-  "updated": "2026-08-31T00:00:00.000Z",
-  "entries": [],
+  "updated": "2026-09-04T00:00:00.000Z",
+  "entries": [
+    {
+      "id": "w1-256-notes-8k2p1",
+      "kind": "journal",
+      "title": "Handwritten Notes for 256 Project",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "256 Project Concepts\n- Connection / Intimacy\n- Motion\n- Materialize immaterializable things\n- Time\n- Point of view / Perspective\n- Grid\n  - Order to Mess / Chaos\n  - Chaos & Order\n  - Scale\n- Persuasive Languauge\n- Business Cards / Post Cards / Stamps\n- Form > Function, Function > Form\n  - Question why I look at things through this lens\n- Data Visualisation\n- Sky\n- Spotify Music",
+      "projects": ["256"],
+      "tags": [],
+      "date": "2026-08-28",
+      "dateAdded": "2026-08-28T09:00:00.000Z",
+      "attachments": []
+    }
+  ],
   "statusLog": []
 }
