@@ -1281,8 +1281,9 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   cursor: pointer;
   color: #2b2622;
 }
-.folder-item:first-child { border-top: 0; }
+.folder-row:first-child .folder-item { border-top: 0; }
 .folder-item:hover { background: rgba(43, 38, 34, 0.055); }
+.folder-item.is-expanded { background: rgba(43, 38, 34, 0.07); }
 .fi-kind { font-size: 9px; text-transform: uppercase; letter-spacing: 0.13em; opacity: 0.5; }
 .fi-title { font-size: 13.5px; font-weight: 500; }
 .fi-date { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.5; }
@@ -1291,15 +1292,46 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
   color: var(--fg);
 }
-.folder-seeall {
-  display: block; width: 100%; text-align: left;
-  padding: 13px 16px;
-  border: 0; border-top: 1px solid rgba(43, 38, 34, 0.16);
-  background: none; cursor: pointer;
-  font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 600;
+/* the notes + connections that drop down under a clicked entry, in place of the popup */
+.folder-detail {
+  padding: 2px 16px 16px;
+  background: rgba(43, 38, 34, 0.035);
+  border-top: 1px solid rgba(43, 38, 34, 0.12);
+}
+.folder-detail .entry-note {
+  padding-top: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #2b2622;
+}
+.folder-detail .note-sub::before { color: rgba(43, 38, 34, 0.45); }
+.folder-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-top: 14px;
+}
+.folder-detail-meta .pill {
+  border: 0;
+  cursor: pointer;
+  background: rgba(43, 38, 34, 0.08);
+  color: #2b2622;
+}
+.folder-detail-meta .pill:hover { background: rgba(43, 38, 34, 0.15); }
+.folder-detail-edit {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 4px 2px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
   color: var(--head);
 }
-.folder-seeall:hover { background: rgba(43, 38, 34, 0.055); }
+.folder-detail-edit:hover { text-decoration: underline; }
 
 @media (max-width: 760px) {
   body.view-files .brand-title { font-size: clamp(20px, 6vw, 28px); }

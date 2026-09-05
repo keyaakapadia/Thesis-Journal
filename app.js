@@ -645,11 +645,6 @@
           key: p.id,
           label: p.label,
           items: pool.filter((e) => (e.projects || []).includes(p.id)),
-          route: () => {
-            filters.projects = new Set([p.id]);
-            filters.tags = new Set();
-            filters.view = "all";
-          },
         })
       );
       const unfiled = pool.filter(
@@ -664,13 +659,6 @@
           label:
             KIND_LABEL[k] === "Resource" ? "Resources" : KIND_LABEL[k] + "s",
           items: pool.filter((e) => e.kind === k),
-          route: () => {
-            filters.projects = new Set();
-            filters.tags = new Set();
-            filters.view = ["reading", "website", "image", "document", "journal"].includes(k)
-              ? k
-              : "all";
-          },
         });
       });
     } else if (order === "tag") {
@@ -681,11 +669,6 @@
             key: t,
             label: "#" + t,
             items: pool.filter((e) => (e.tags || []).includes(t)),
-            route: () => {
-              filters.tags = new Set([t]);
-              filters.projects = new Set();
-              filters.view = "all";
-            },
           })
         );
     } else if (order === "week") {
@@ -708,7 +691,6 @@
               month: "short",
             }) + " · class " + n + "/" + TERM_WEEKS,
           items: byWeek.get(n) || [],
-          route: null,
         });
       }
       // ghost: the next class week, opens on its Friday
@@ -833,6 +815,26 @@
     }, 580);
   }
 
+  // jump straight to a folder from anywhere inside the Files view — an entry's
+  // project/tag/week are all just doors into the same drawer
+  function gotoFolder(order, key) {
+    filesOrder = order;
+    filesOpenKey = key;
+    render();
+  }
+
+  function pillBtn(label, className, onClick) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = className;
+    b.textContent = label;
+    b.onclick = (ev) => {
+      ev.stopPropagation();
+      onClick();
+    };
+    return b;
+  }
+
   function renderFiles(content) {
     const view = document.createElement("div");
     view.className = "files-view";
@@ -949,6 +951,9 @@
       const paper = document.createElement("div");
       paper.className = "folder-sheet";
       sortEntries(current.items).forEach((e) => {
+        const wrap = document.createElement("div");
+        wrap.className = "folder-row";
+
         const row = document.createElement("button");
         row.type = "button";
         row.className = "folder-item";
@@ -957,21 +962,58 @@
         )}</span><span class="fi-title">${esc(
           e.title || "Untitled"
         )}</span><span class="fi-date">${esc(fmtDate(entryDate(e)))}</span>`;
-        row.onclick = () => openModal(e);
-        paper.appendChild(row);
-      });
-      if (current.route) {
-        const all = document.createElement("button");
-        all.type = "button";
-        all.className = "folder-seeall";
-        all.textContent = "Open in the list →";
-        all.onclick = () => {
-          current.route();
-          saveUI();
-          render();
+
+        const detail = document.createElement("div");
+        detail.className = "folder-detail";
+        detail.hidden = true;
+        detail.innerHTML = `<div class="entry-note">${
+          e.note
+            ? noteHTML(e.note)
+            : `<span class="note-line" style="opacity:.5">No notes yet.</span>`
+        }</div>`;
+
+        const meta = document.createElement("div");
+        meta.className = "folder-detail-meta";
+        const d = entryDate(e);
+        if (d) {
+          const wk = "w" + Math.min(termWeekOf(d), weeksOpen());
+          meta.appendChild(
+            pillBtn("Week " + wk.slice(1), "pill week", () =>
+              gotoFolder("week", wk)
+            )
+          );
+        }
+        (e.projects || []).forEach((p) =>
+          meta.appendChild(
+            pillBtn(PROJECT_LABEL[p] || p, "pill project", () =>
+              gotoFolder("project", p)
+            )
+          )
+        );
+        (e.tags || []).forEach((t) =>
+          meta.appendChild(pillBtn(t, "pill tag", () => gotoFolder("tag", t)))
+        );
+        meta.appendChild(
+          pillBtn("Edit entry →", "folder-detail-edit", () => openModal(e))
+        );
+        detail.appendChild(meta);
+
+        row.onclick = () => {
+          const willOpen = detail.hidden;
+          paper
+            .querySelectorAll(".folder-detail:not([hidden])")
+            .forEach((x) => (x.hidden = true));
+          paper
+            .querySelectorAll(".folder-item.is-expanded")
+            .forEach((x) => x.classList.remove("is-expanded"));
+          detail.hidden = !willOpen;
+          row.classList.toggle("is-expanded", willOpen);
         };
-        paper.appendChild(all);
-      }
+
+        wrap.appendChild(row);
+        wrap.appendChild(detail);
+        paper.appendChild(wrap);
+      });
       sheet.appendChild(paper);
     }
     view.appendChild(face);
