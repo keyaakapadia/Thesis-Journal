@@ -503,6 +503,20 @@ a { color: inherit; }
   color: var(--ink-soft);
 }
 .entry-note .note-sub::before { content: "\21b3\00a0"; color: var(--ink-faint); }
+.note-ref {
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--head);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.folder-detail .note-ref { color: #3a3ab0; }
+.note-ref:hover { opacity: 0.75; }
 
 .entry-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .pill {
@@ -515,7 +529,6 @@ a { color: inherit; }
 }
 .pill.project { background: var(--accent-soft); color: var(--ink); }
 .pill.tag { border: 1px solid var(--line-strong); color: var(--ink-faint); }
-.pill.tag::before { content: "#"; opacity: 0.5; }
 
 .entry-attach { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .thumb {
@@ -1008,6 +1021,7 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .files-view {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;                      /* let it shrink below its content's natural width on narrow screens */
   display: flex;
   flex-direction: column;
   padding-bottom: 12px;
@@ -1123,10 +1137,14 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 
 /* ================= OPEN STATE: bands collapse into a top row ================= */
 .files-tabrow.is-open {
+  order: 2;                          /* the row of tabs lives at the bottom, under the face */
   flex: 0 0 auto;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: space-between;    /* evenly spread across the width */
   padding: 0 2px;
+  overflow-x: auto;                  /* scroll the strip sideways rather than overflow the page */
+  min-width: 0;
 }
 .files-tabrow.is-open .files-tab {
   flex: 0 0 auto;                    /* width follows the label, not an equal share */
@@ -1154,10 +1172,10 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .files-tabrow.is-open .files-tab.is-current .ff-tab {
   position: relative;
   z-index: 2;
-  transform: translateY(5px);       /* laps onto the face — tab + folder body read as one piece */
+  transform: translateY(-5px);      /* laps up onto the face above — tab + folder body read as one piece */
   box-shadow: none;
 }
-.files-tabrow.is-open .files-tab.is-current:hover .ff-tab { transform: translateY(5px); }
+.files-tabrow.is-open .files-tab.is-current:hover .ff-tab { transform: translateY(-5px); }
 .files-tabrow.is-open .ff-tab .ft-sub { display: none; }
 
 .files-tab.has-cover {
@@ -1214,15 +1232,16 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .files-face {
   --fg: #fff;
   --bgc: var(--bg-raise);
+  order: 1;                          /* sits above the tab row, which lives at the bottom */
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--bgc);
   color: var(--fg);
-  border-radius: 12px 12px 0 0;
+  border-radius: 0 0 12px 12px;
   overflow: hidden;
-  box-shadow: 0 -12px 28px -18px rgba(20, 20, 30, 0.45);
+  box-shadow: 0 12px 28px -18px rgba(20, 20, 30, 0.45);
   transition: background 0.34s ease, color 0.34s ease;
 }
 .files-face.has-cover {
@@ -1261,7 +1280,7 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 
 /* the sheet of paper inside the panel */
 .folder-sheet {
-  background: color-mix(in srgb, #fffdf4 90%, var(--bgc));
+  background: color-mix(in srgb, #fffdf4 55%, var(--bgc));
   color: #2b2622;
   box-shadow: 0 3px 14px -5px rgba(20, 20, 30, 0.45);
   border-radius: 3px;
@@ -1269,7 +1288,7 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 }
 .folder-item {
   display: grid;
-  grid-template-columns: 90px 1fr auto;
+  grid-template-columns: 80px 1fr auto;
   gap: 14px;
   align-items: baseline;
   width: 100%;
@@ -1287,6 +1306,21 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .fi-kind { font-size: 9px; text-transform: uppercase; letter-spacing: 0.13em; opacity: 0.5; }
 .fi-title { font-size: 13.5px; font-weight: 500; }
 .fi-date { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.5; }
+/* a reading that's recommended but not read yet, vs. one that's done */
+.folder-item.is-recommended .fi-title { font-style: italic; opacity: 0.68; }
+.fi-flag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-style: normal;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  vertical-align: middle;
+  opacity: 0.8;
+}
 .folder-empty {
   padding: 22px 16px;
   font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
@@ -1319,6 +1353,13 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   color: #2b2622;
 }
 .folder-detail-meta .pill:hover { background: rgba(43, 38, 34, 0.15); }
+.folder-detail .entry-attach { margin-top: 14px; }
+.folder-detail .file-chip {
+  border-color: rgba(43, 38, 34, 0.25);
+  color: #2b2622;
+}
+.folder-detail .file-chip:hover { border-color: rgba(43, 38, 34, 0.5); }
+.folder-detail .thumb { border-color: rgba(43, 38, 34, 0.25); }
 .folder-detail-edit {
   margin-left: auto;
   border: 0;
@@ -1336,13 +1377,13 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 @media (max-width: 760px) {
   body.view-files .brand-title { font-size: clamp(20px, 6vw, 28px); }
   .fp-head { padding: 12px 16px 10px; }
-  .folder-item { grid-template-columns: 1fr auto; padding: 12px 14px; }
+  .folder-item { grid-template-columns: auto 1fr; padding: 12px 14px; }
   .folder-item .fi-kind { display: none; }
   /* rest state: vertical bands scroll if there are many */
   .files-tabrow { overflow-y: auto; }
   .files-tabrow .files-tab { flex: 0 0 auto; min-height: 68px; }
   /* open state: tabs still hug their text; the row scrolls sideways if they overrun */
-  .files-tabrow.is-open { overflow-x: auto; overflow-y: visible; }
+  .files-tabrow.is-open { overflow-y: visible; }
   .files-tabrow.is-open .files-tab { min-width: 0; max-width: 70%; }
 }
 

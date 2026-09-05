@@ -18,8 +18,10 @@
 
   const KIND_LABEL = {
     reading: "Reading",
-    reference: "Reference",
-    website: "Resource",
+    artist: "Artist",
+    font: "Font",
+    "design-ref": "Design Reference",
+    resource: "Resource",
     image: "Image",
     document: "Document",
     journal: "Journal",
@@ -211,14 +213,27 @@
   }
 
   // Notes: turn lines that start with - – — > • ↳ into hanging "↳" sub-points
+  // **bold** for key points, and [[entry-id]] as a hyperlink straight to that entry
+  function noteInline(escapedLine) {
+    return escapedLine
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\[\[([a-zA-Z0-9_-]+)\]\]/g, (whole, id) => {
+        const ref = entries.find((x) => x.id === id);
+        if (!ref) return whole;
+        return `<button type="button" class="note-ref" data-ref-id="${esc(
+          id
+        )}">${esc(ref.title || "Untitled")}</button>`;
+      });
+  }
+
   function noteHTML(text) {
     return esc(text)
       .split("\n")
       .map((ln) => {
         const m = ln.match(/^\s*(?:[-–—>•]|&gt;|↳)\s+(.*)$/);
         return m
-          ? `<span class="note-sub">${m[1]}</span>`
-          : `<span class="note-line">${ln}</span>`;
+          ? `<span class="note-sub">${noteInline(m[1])}</span>`
+          : `<span class="note-line">${noteInline(ln)}</span>`;
       })
       .join("");
   }
@@ -241,9 +256,13 @@
       case "all":
         return e.kind !== "journal";
       case "reading":
-        return e.kind === "reading" || e.kind === "reference";
+        return e.kind === "reading";
       case "website":
-        return e.kind === "website" || (!!e.url && e.kind !== "journal");
+        return (
+          e.kind === "design-ref" ||
+          e.kind === "resource" ||
+          (!!e.url && e.kind !== "journal")
+        );
       case "image":
         return e.kind === "image" || (e.attachments || []).some((a) => a.isImage);
       case "document":
@@ -333,7 +352,7 @@
     allTags.forEach((t) => {
       const b = document.createElement("button");
       b.className = "chip" + (filters.tags.has(t) ? " is-on" : "");
-      b.textContent = "#" + t;
+      b.textContent = t;
       b.onclick = () => {
         filters.tags.has(t) ? filters.tags.delete(t) : filters.tags.add(t);
         render();
@@ -430,7 +449,7 @@
       if (!single) {
         const h = document.createElement("div");
         h.className = "group-head";
-        h.textContent = `${g.label} — ${g.items.length}`;
+        h.textContent = `${g.label} · ${g.items.length}`;
         content.appendChild(h);
       }
       sortEntries(g.items).forEach((e) => content.appendChild(entryRow(e)));
@@ -530,7 +549,7 @@
       })
     );
     if (!tiles.length) {
-      content.innerHTML = `<div class="empty"><h3>No images yet</h3><p>Attach images to any entry — they appear here, grouped by project.</p></div>`;
+      content.innerHTML = `<div class="empty"><h3>No images yet</h3><p>Attach images to any entry, they appear here, grouped by project.</p></div>`;
       return;
     }
     const groups = new Map();
@@ -547,7 +566,7 @@
       const label = gid === "__none" ? "Unfiled" : PROJECT_LABEL[gid];
       const h = document.createElement("div");
       h.className = "group-head";
-      h.textContent = `${label} — ${list.length} image${list.length === 1 ? "" : "s"}`;
+      h.textContent = `${label} · ${list.length} image${list.length === 1 ? "" : "s"}`;
       content.appendChild(h);
       const grid = document.createElement("div");
       grid.className = "gallery";
@@ -598,7 +617,7 @@
   const FILE_ORDERS = [
     ["week", "week"],
     ["project", "project"],
-    ["type", "type"],
+    ["type", "category"],
     ["tag", "tag"],
   ];
 
@@ -667,20 +686,27 @@
         .forEach((t) =>
           groups.push({
             key: t,
-            label: "#" + t,
+            label: t,
             items: pool.filter((e) => (e.tags || []).includes(t)),
           })
         );
     } else if (order === "week") {
+      // small reference-style entries (fonts, artists, design refs, resources)
+      // are already listed inline in that week's note — keep them out of the
+      // week view itself so it doesn't get cluttered; they still live under
+      // their own Type tab and under the project.
+      const REFERENCE_KINDS = new Set(["font", "artist", "design-ref", "resource"]);
       const open = weeksOpen();
       const byWeek = new Map();
-      pool.forEach((e) => {
-        const d = entryDate(e);
-        if (!d) return;
-        const n = Math.min(termWeekOf(d), open);
-        if (!byWeek.has(n)) byWeek.set(n, []);
-        byWeek.get(n).push(e);
-      });
+      pool
+        .filter((e) => !REFERENCE_KINDS.has(e.kind))
+        .forEach((e) => {
+          const d = entryDate(e);
+          if (!d) return;
+          const n = Math.min(termWeekOf(d), open);
+          if (!byWeek.has(n)) byWeek.set(n, []);
+          byWeek.get(n).push(e);
+        });
       for (let n = open; n >= 1; n--) {
         groups.push({
           key: "w" + n,
@@ -823,6 +849,26 @@
     render();
   }
 
+  // follow a [[entry-id]] note link: land on the folder it lives in (by week,
+  // since every entry has one) and pop its notes open, same as clicking it there
+  function openEntryRef(id) {
+    const e = entries.find((x) => x.id === id);
+    if (!e) return;
+    filters.view = "files";
+    const d = entryDate(e);
+    if (d) {
+      filesOrder = "week";
+      filesOpenKey = "w" + Math.min(termWeekOf(d), weeksOpen());
+    }
+    render();
+    // render() writes the DOM synchronously, so the row is already there to find
+    const row = document.querySelector(`.folder-item[data-id="${CSS.escape(id)}"]`);
+    if (row) {
+      row.scrollIntoView({ block: "center" });
+      row.click();
+    }
+  }
+
   function pillBtn(label, className, onClick) {
     const b = document.createElement("button");
     b.type = "button";
@@ -872,7 +918,7 @@
           )}”.</p>`
         : `<div class="empty">
         <h3>The file is empty</h3>
-        <p>Add a reading, a link, an image or this week's line — it drops into a folder here on its own.</p>
+        <p>Add a reading, a link, an image or this week's line, it drops into a folder here on its own.</p>
         <button class="add-btn" onclick="document.getElementById('addBtn').click()">Start the file</button>
       </div>`;
       view.appendChild(empty);
@@ -957,20 +1003,50 @@
         const row = document.createElement("button");
         row.type = "button";
         row.className = "folder-item";
-        row.innerHTML = `<span class="fi-kind">${esc(
-          KIND_LABEL[e.kind] || ""
+        row.dataset.id = e.id;
+        row.classList.toggle("is-recommended", e.status === "recommended");
+        row.innerHTML = `<span class="fi-date">${esc(
+          fmtDate(entryDate(e))
         )}</span><span class="fi-title">${esc(
           e.title || "Untitled"
-        )}</span><span class="fi-date">${esc(fmtDate(entryDate(e)))}</span>`;
+        )}${
+          e.status === "recommended"
+            ? `<span class="fi-flag">to read</span>`
+            : ""
+        }</span><span class="fi-kind">${esc(KIND_LABEL[e.kind] || "")}</span>`;
 
         const detail = document.createElement("div");
         detail.className = "folder-detail";
         detail.hidden = true;
+        const attachHTML = (e.attachments || [])
+          .map((a, i) =>
+            a.isImage
+              ? `<img class="thumb" src="${a.dataUrl}" alt="${esc(
+                  a.name
+                )}" data-att="${i}">`
+              : `<a class="file-chip" href="${a.dataUrl}" target="_blank" rel="noopener" download="${esc(
+                  a.name
+                )}">▤ ${esc(a.name)}</a>`
+          )
+          .join("");
         detail.innerHTML = `<div class="entry-note">${
           e.note
             ? noteHTML(e.note)
             : `<span class="note-line" style="opacity:.5">No notes yet.</span>`
-        }</div>`;
+        }</div>${
+          attachHTML ? `<div class="entry-attach">${attachHTML}</div>` : ""
+        }`;
+        detail
+          .querySelectorAll(".thumb")
+          .forEach((img) =>
+            img.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              openLightbox(e.attachments[+img.dataset.att], e);
+            })
+          );
+        detail
+          .querySelectorAll(".file-chip")
+          .forEach((a) => a.addEventListener("click", (ev) => ev.stopPropagation()));
 
         const meta = document.createElement("div");
         meta.className = "folder-detail-meta";
@@ -1145,9 +1221,9 @@
     if (entry.projects && entry.projects.length)
       bits.push(entry.projects.map((p) => PROJECT_LABEL[p] || p).join(", "));
     if (entry.tags && entry.tags.length)
-      bits.push(entry.tags.map((t) => "#" + t).join(" "));
+      bits.push(entry.tags.join(" "));
     if (entry.note) bits.push(entry.note);
-    $("#lightboxCaption").textContent = bits.filter(Boolean).join("  —  ");
+    $("#lightboxCaption").textContent = bits.filter(Boolean).join("   ·   ");
     $("#lightbox").hidden = false;
   }
   function closeLightbox() {
@@ -1165,10 +1241,10 @@
     $("#f-sourceRow").hidden = journal;
     $("#f-urlField").hidden = journal;
     $("#f-titleLabel").innerHTML = journal
-      ? "Heading <span class='hint' style='text-transform:none;letter-spacing:0'>(optional — defaults to “Week of…”)</span>"
+      ? "Heading <span class='hint' style='text-transform:none;letter-spacing:0'>(optional, defaults to “Week of…”)</span>"
       : 'Title <span class="req">*</span>';
     $("#f-title").placeholder = journal
-      ? "e.g. Week 6 — narrowing the question"
+      ? "e.g. Week 6: narrowing the question"
       : "What is it called?";
     $("#f-dateLabel").textContent = journal ? "Date" : "Date read";
     $("#f-noteLabel").textContent = journal
@@ -1342,6 +1418,7 @@
         dataUrl: a.dataUrl,
         isImage: !!a.isImage,
       })),
+      status: existing ? existing.status || "" : "",
     };
 
     await dbPut(entry);
@@ -1411,6 +1488,7 @@
         date: raw.date || raw.dateRead || (raw.dateAdded || "").slice(0, 10),
         dateAdded: raw.dateAdded || new Date().toISOString(),
         attachments: Array.isArray(raw.attachments) ? raw.attachments : [],
+        status: raw.status || "",
       };
       await dbPut(entry);
       const idx = entries.findIndex((e) => e.id === entry.id);
@@ -1628,8 +1706,8 @@
       btn.classList.toggle("is-error", s === "error");
       btn.title =
         s === "off"
-          ? "GitHub sync — off"
-          : "GitHub sync — " + (note || s);
+          ? "GitHub sync: off"
+          : "GitHub sync: " + (note || s);
     }
     const el = $("#gh-status");
     if (el && note) el.textContent = note;
@@ -1731,7 +1809,7 @@
     if (!gh) return;
     try {
       setGhState("syncing", "saving to GitHub…");
-      await ghPut("journal update — " + new Date().toISOString());
+      await ghPut("journal update: " + new Date().toISOString());
       setGhState("idle", "synced " + new Date().toLocaleTimeString());
     } catch (e) {
       console.error(e);
@@ -1857,6 +1935,13 @@
   /* ---------- wiring ---------- */
 
   function wire() {
+    document.addEventListener("click", (ev) => {
+      const ref = ev.target.closest(".note-ref");
+      if (!ref) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      openEntryRef(ref.dataset.refId);
+    });
     $("#addBtn").onclick = () => openModal(null);
     $("#modalClose").onclick = closeModal;
     $("#cancelBtn").onclick = closeModal;

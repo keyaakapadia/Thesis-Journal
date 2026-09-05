@@ -17,12 +17,12 @@
       <h1 class="brand-title">Thesis Journal</h1>
       <div class="header-right">
         <time id="clock" class="clock">--:--:--</time>
-        <button id="syncBtn" class="icon-btn" title="GitHub sync — off" aria-label="GitHub sync">⇅</button>
+        <button id="syncBtn" class="icon-btn" title="GitHub sync: off" aria-label="GitHub sync">⇅</button>
         <button id="themeBtn" class="icon-btn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
         <button id="addBtn" class="add-btn">Add</button>
       </div>
     </div>
-    <p class="brand-sub">An open notebook for the thesis — reading, references, sources, images, annotated documents, and a weekly process log.</p>
+    <p class="brand-sub">An open notebook for the thesis: reading, references, sources, images, annotated documents, and a weekly process log.</p>
 
     <nav class="views" id="views">
       <button class="view-btn is-active" data-view="files">Files</button>
@@ -50,7 +50,7 @@
     <span class="currently-updated" id="statusCurrentMeta"></span>
 
     <form class="status-editor" id="statusEditor" hidden>
-      <textarea id="statusInput" rows="3" placeholder="Quick and human — what are you working on this week? What moved, what's next?"></textarea>
+      <textarea id="statusInput" rows="3" placeholder="Quick and human: what are you working on this week? What moved, what's next?"></textarea>
       <div class="status-editor-foot">
         <label class="status-date">Week of <input type="date" id="statusDate" /></label>
         <span class="spacer"></span>
@@ -64,7 +64,7 @@
 
   <section class="toolbar">
     <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the file — titles, notes, tags, names…" autocomplete="off" />
+      <input id="search" type="search" placeholder="Search the file: titles, notes, tags, names…" autocomplete="off" />
     </div>
 
     <div class="filters">
@@ -98,7 +98,7 @@
   <main id="content" class="content"></main>
 
   <footer class="site-footer">
-    <span>Stored in this browser. Turn on <b>⇅ GitHub sync</b> to share across devices and commit every change — or use <b>Export</b> for a one-off backup.</span>
+    <span>Stored in this browser. Turn on <b>⇅ GitHub sync</b> to share across devices and commit every change, or use <b>Export</b> for a one-off backup.</span>
   </footer>
 
   <!-- ============ Add / Edit modal ============ -->
@@ -115,12 +115,14 @@
         <div class="field">
           <label for="f-kind">Type</label>
           <select id="f-kind">
-            <option value="reading">Reading — book, article, essay</option>
-            <option value="reference">Reference — citation / source</option>
-            <option value="website">Resource / Website — link</option>
-            <option value="image">Image — visual reference</option>
-            <option value="document">Annotated document — PDF + notes</option>
-            <option value="journal">Journal — weekly comment / reflection</option>
+            <option value="reading">Reading: book, article, essay</option>
+            <option value="artist">Artist reference</option>
+            <option value="font">Font</option>
+            <option value="design-ref">Design reference: website</option>
+            <option value="resource">Resource: website to use (order books, print, etc.)</option>
+            <option value="image">Image: visual reference</option>
+            <option value="document">Annotated document: PDF + notes</option>
+            <option value="journal">Journal: weekly comment / reflection</option>
           </select>
         </div>
 
@@ -171,7 +173,7 @@
         </div>
 
         <div class="field">
-          <label>Attachments — images &amp; PDFs</label>
+          <label>Attachments: images &amp; PDFs</label>
           <div class="dropzone" id="f-dropzone" tabindex="0">
             <p>Drag files here, click to choose, or paste an image</p>
             <input id="f-files" type="file" accept="image/*,application/pdf" multiple hidden />
@@ -198,15 +200,15 @@
       </div>
       <div class="entry-form">
         <p class="hint">
-          Keeps everything in a <code>data.json</code> file in a GitHub repo —
+          Keeps everything in a <code>data.json</code> file in a GitHub repo,
           one commit per change, so it shows up in GitHub Desktop after it
           fetches. Turn this on for every device that shares the journal,
-          including your phone. Your token is stored only in this browser — use a
+          including your phone. Your token is stored only in this browser, use a
           <b>fine-grained token limited to this one repo</b> with
           <i>Contents: Read and write</i>.
         </p>
         <div class="field">
-          <label for="gh-repo">Repository — owner / name</label>
+          <label for="gh-repo">Repository: owner / name</label>
           <input type="text" id="gh-repo" placeholder="keyaa/thesis-journal" autocapitalize="off" autocorrect="off" spellcheck="false" />
         </div>
         <div class="field-row">
