@@ -520,6 +520,13 @@ a { color: inherit; }
 }
 .folder-detail .note-ref { color: #000; }
 .note-ref:hover { opacity: 0.75; }
+.note-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-all;
+}
+.note-link:hover { opacity: 0.75; }
 
 .entry-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .pill {

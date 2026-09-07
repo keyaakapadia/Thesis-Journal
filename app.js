@@ -223,7 +223,11 @@
         return `<button type="button" class="note-ref" data-ref-id="${esc(
           id
         )}">${esc(ref.title || "Untitled")}</button>`;
-      });
+      })
+      .replace(
+        /(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g,
+        '<a href="$1" target="_blank" rel="noopener" class="note-link">$1</a>'
+      );
   }
 
   function noteHTML(text) {
