@@ -230,10 +230,14 @@
     return esc(text)
       .split("\n")
       .map((ln) => {
-        const m = ln.match(/^\s*(?:[-–—>•]|&gt;|↳)\s+(.*)$/);
-        return m
-          ? `<span class="note-sub">${noteInline(m[1])}</span>`
-          : `<span class="note-line">${noteInline(ln)}</span>`;
+        const m = ln.match(/^([ \t]*)(?:[-–—>•]|&gt;|↳)\s+(.*)$/);
+        if (!m) return `<span class="note-line">${noteInline(ln)}</span>`;
+        // leading indent → nesting depth (every 2 spaces / 1 tab = one level in)
+        const indent = m[1].replace(/\t/g, "  ").length;
+        const depth = Math.min(3, Math.floor(indent / 2) + 1);
+        return `<span class="note-sub note-sub-${depth}">${noteInline(
+          m[2]
+        )}</span>`;
       })
       .join("");
   }
