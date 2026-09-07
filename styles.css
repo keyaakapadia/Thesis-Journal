@@ -1061,7 +1061,7 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .tone-8:not(.has-cover) { --bgc: var(--f8); --fg: var(--f8-ink); }
 .tone-9:not(.has-cover) { --bgc: var(--f9); --fg: var(--f9-ink); }
 
-/* ================= REST STATE: horizontal colour bands with poking tabs ================= */
+/* ================= REST STATE: colour bands, each with a poking tab ================= */
 .files-tabrow {
   flex: 1 1 auto;
   min-height: 0;
@@ -1069,39 +1069,34 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   flex-direction: column;
   position: relative;
   z-index: 30;
-  padding-top: 46px;                 /* clears the top band's poking tab from the "file by" row */
+  padding-top: 46px;                 /* room for the top band's tab */
 }
 .files-tab {
   --fg: #fff;
   --bgc: var(--bg-raise);
   position: relative;
-  flex: 0 0 auto;                    /* compact fixed-height bands */
+  flex: 0 0 auto;
   min-height: 40px;
   width: 100%;
   padding: 0;
   border: 0;
-  border-radius: 12px 12px 0 0;     /* top corners round, base straight — like a file */
+  border-radius: 0;
   background: var(--bgc);            /* the full-width band */
   color: var(--fg);
   cursor: pointer;
-  overflow: visible;
   transition:
     flex-grow 0.34s ease, flex-basis 0.34s ease, min-height 0.34s ease,
     margin 0.34s ease, padding 0.3s ease, opacity 0.24s ease,
-    transform 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), filter 0.26s ease,
-    border-radius 0.26s ease;
+    transform 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), filter 0.26s ease;
 }
-.files-tab.is-locked { min-height: 0; }   /* the ghost is just its dashed tab */
-/* the last real band fills the remaining screen so it reaches the bottom */
-.files-tabrow:not(.is-open) .files-tab:last-of-type { flex: 1 1 auto; }
-/* rest stack: overlap the bands so each rounded top tucks under the one above (no paper gaps) */
+/* bands overlap tightly; each tab pokes up above its own band and paints over the one above (z ascends in JS) */
 .files-tabrow:not(.is-open) .files-tab { margin-top: -12px; }
 .files-tabrow:not(.is-open) .files-tab:first-of-type,
 .files-tabrow:not(.is-open) .files-tab.is-locked + .files-tab { margin-top: 0; }
-/* hover = lift the whole folder (band + its tab) out of the drawer, together */
+.files-tabrow:not(.is-open) .files-tab:last-of-type { flex: 1 1 auto; }
+/* hover = lift the whole folder (band + its tab) out of the stack */
 .files-tabrow:not(.is-open) .files-tab:hover {
   transform: translateY(-10px);
-  border-radius: 14px 14px 0 0;
   filter: brightness(1.03) drop-shadow(0 8px 18px rgba(22, 16, 28, 0.3));
 }
 .files-tabrow:not(.is-open) .files-tab.is-locked:hover {
@@ -1109,33 +1104,35 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   filter: none;
 }
 
-/* the tab that pokes up above the band */
+/* the tab poking up above the band, at a scattered x-position per folder */
 .ff-tab {
   position: absolute;
-  left: max(2%, min(var(--tab-x, 4%), calc(100% - 216px)));  /* never let the label run off the edge */
-  bottom: 100%;                      /* sits directly on top of the band */
-  margin-bottom: -1px;               /* base flush with the band top */
-  max-width: min(72%, calc(100% - 16px));
-  overflow: hidden;
-  padding: 6px 20px 11px;
-  border-radius: 14px 14px 0 0;      /* top corners round, base straight */
-  background: var(--bgc);
-  color: var(--fg);
+  bottom: 100%;
+  left: max(2%, min(var(--tab-x, 4%), calc(100% - 220px)));
+  margin-bottom: -1px;
   display: flex;
   align-items: baseline;
   gap: 12px;
+  padding: 7px 22px 10px;
+  max-width: min(72%, calc(100% - 16px));
+  overflow: hidden;
   white-space: nowrap;
+  border-radius: 12px 12px 0 0;
+  background: var(--bgc);
+  color: var(--fg);
   transform: rotate(var(--rot, 0deg));
   transform-origin: bottom left;
-  transition: left 0.32s ease, padding 0.3s ease, border-radius 0.3s ease;
+  transition: left 0.32s ease, padding 0.3s ease;
+}
+/* the ghost (week not open yet): neutral, no colour wash */
+.files-tab.is-locked {
+  background: rgba(128, 128, 128, 0.08);
 }
 .files-tab.is-locked .ff-tab {
   background: none;
   border: 1px dashed var(--line-strong);
   border-bottom: 0;
-  border-radius: 14px 14px 0 0;
   color: var(--ink-faint);
-  opacity: 0.7;
 }
 
 /* ================= OPEN STATE: bands collapse into a top row ================= */
@@ -1161,24 +1158,28 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   width: 100%;
   padding: 10px 8px 12px;
   border-radius: 13px 13px 0 0;
+  background: var(--bgc);
+  color: var(--fg);
   justify-content: center;
   transform: none;
   opacity: 1;                        /* every tab full strength, selected or not */
   overflow: hidden;
 }
 .files-tabrow.is-open .files-tab:hover .ff-tab {
-  transform: translateY(-4px);
+  filter: brightness(1.05);
 }
 .files-tabrow.is-open .files-tab.is-current { z-index: 60; }
 .files-tabrow.is-open .files-tab.is-current .ff-tab {
-  position: relative;
-  z-index: 2;
-  transform: translateY(5px);       /* laps down onto the face below — tab + folder body read as one piece */
-  box-shadow: none;
+  box-shadow: 0 -3px 10px -4px rgba(20, 20, 30, 0.35);
 }
-.files-tabrow.is-open .files-tab.is-current:hover .ff-tab { transform: translateY(5px); }
-.files-tabrow.is-open .ff-tab .ft-sub,
-.files-tabrow.is-open .ff-tab .ft-axis { display: none; }
+.files-tabrow.is-open .files-tab:not(.is-current) .ff-tab { opacity: 0.72; }
+/* the unopened week: no colour in the open strip either */
+.files-tabrow.is-open .files-tab.is-locked .ff-tab {
+  background: rgba(128, 128, 128, 0.12);
+  color: var(--ink-faint);
+  opacity: 0.6;
+}
+.files-tabrow.is-open .ff-tab .ft-sub { display: none; }
 .files-tabrow.is-open .ft-name {
   flex: 0 1 auto;
   min-width: 0;
@@ -1197,11 +1198,8 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 }
 .files-tab.is-locked {
   flex: 0 0 auto;
-  min-height: 0;
-  background: none;
   border: 0;
   color: var(--ink-faint);
-  opacity: 0.6;
   pointer-events: none;
 }
 .ft-name {
@@ -1225,8 +1223,6 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* the axis word ("project" / "type"), shown beside the label once a tab is opened */
-.ft-axis { display: none; }
 
 /* ---- the current folder: one full-page face that covers everything ---- */
 .files-face {
