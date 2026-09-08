@@ -213,21 +213,35 @@
   }
 
   // Notes: turn lines that start with - – — > • ↳ into hanging "↳" sub-points
-  // **bold** for key points, and [[entry-id]] as a hyperlink straight to that entry
+  // **bold** for key points, [[entry-id]] as a hyperlink straight to that entry,
+  // [words](https://…) to hyperlink the words, and bare URLs link themselves.
   function noteInline(escapedLine) {
+    // Finished links get parked as placeholders so the bare-URL pass below
+    // can't run over the href of a link we just built.
+    const held = [];
+    const hold = (html) => `\u0000${held.push(html) - 1}\u0000`;
+
     return escapedLine
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\[\[([a-zA-Z0-9_-]+)\]\]/g, (whole, id) => {
         const ref = entries.find((x) => x.id === id);
         if (!ref) return whole;
-        return `<button type="button" class="note-ref" data-ref-id="${esc(
-          id
-        )}">${esc(ref.title || "Untitled")}</button>`;
+        return hold(
+          `<button type="button" class="note-ref" data-ref-id="${esc(
+            id
+          )}">${esc(ref.title || "Untitled")}</button>`
+        );
       })
+      .replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (whole, label, href) =>
+        hold(
+          `<a href="${href}" target="_blank" rel="noopener" class="note-link">${label}</a>`
+        )
+      )
       .replace(
         /(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g,
         '<a href="$1" target="_blank" rel="noopener" class="note-link">$1</a>'
-      );
+      )
+      .replace(/\u0000(\d+)\u0000/g, (whole, i) => held[+i]);
   }
 
   function noteHTML(text) {
