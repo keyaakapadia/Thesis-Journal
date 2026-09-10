@@ -1164,7 +1164,7 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   max-width: none;
   width: 100%;
   padding: 10px 8px 12px;
-  border-radius: 0;
+  border-radius: 13px 13px 0 0;      /* rounded on top, flush along the bottom into the page */
   background: var(--bgc);
   color: var(--fg);
   justify-content: center;
