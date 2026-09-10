@@ -93,6 +93,7 @@
 
   const UI_KEY = "thesis-journal:ui";
   let entries = [];
+  const retired = new Set(); // ids a snapshot has deleted — carried forward on sync
   const filters = {
     view: "files",
     search: "",
@@ -176,9 +177,16 @@
     return { year: x.getUTCFullYear(), week };
   }
   function weekTag(iso) {
+    // the class week a date files under — same rule as the week folders
     if (!iso) return "";
-    const { year, week } = isoWeek(new Date(iso + "T00:00:00"));
-    return `${year} · Week ${week}`;
+    return `Week ${termWeekOf(iso)}`;
+  }
+  function mondayWeekTag(iso) {
+    // a "week of Monday …" belongs to the class that meets on that week's Friday
+    if (!iso) return "";
+    const fri = new Date(iso + "T00:00:00");
+    fri.setDate(fri.getDate() + 4);
+    return weekTag(toISO(fri));
   }
 
   function esc(s) {
@@ -1491,6 +1499,15 @@
     const incoming = Array.isArray(data) ? data : data.entries;
     if (!Array.isArray(incoming)) return 0;
 
+    // ids listed under "deleted" are removed locally too — merging alone never deletes
+    if (!Array.isArray(data) && Array.isArray(data.deleted)) {
+      for (const id of data.deleted) {
+        retired.add(String(id));
+        await dbDelete(String(id));
+        entries = entries.filter((e) => e.id !== String(id));
+      }
+    }
+
     for (const raw of incoming) {
       if (!raw || !raw.id) continue;
       const entry = {
@@ -1617,7 +1634,7 @@
       $("#statusCurrent").textContent = current.text;
       $("#statusCurrent").classList.remove("is-empty");
       $("#statusCurrentMeta").textContent =
-        "Week of " + fmtFullDate(current.date) + "  ·  " + weekTag(current.date);
+        "Week of " + fmtFullDate(current.date) + "  ·  " + mondayWeekTag(current.date);
       $("#statusEditCurrent").hidden = false;
       $("#statusEditCurrent").onclick = () => openStatusEditor(current);
     } else {
@@ -1640,7 +1657,7 @@
         const li = document.createElement("li");
         li.className = "status-arch";
         li.innerHTML = `
-          <div class="status-arch-date">${esc(fmtDate(it.date))} · ${esc(weekTag(it.date))}</div>
+          <div class="status-arch-date">${esc(fmtDate(it.date))} · ${esc(mondayWeekTag(it.date))}</div>
           <div class="status-arch-text">${noteHTML(it.text)}</div>
           <div class="status-arch-actions">
             <button class="linkbtn" data-act="edit">edit</button>
@@ -1801,6 +1818,7 @@
       updated: new Date().toISOString(),
       entries,
       statusLog,
+      deleted: [...retired],
     };
   }
   async function applySnapshot(data) {
