@@ -677,12 +677,6 @@
     return d;
   }
 
-  function firstImage(items) {
-    for (const e of items)
-      for (const a of e.attachments || []) if (a.isImage) return a.dataUrl;
-    return null;
-  }
-
   function buildFolders(order) {
     const pool = entries.filter(passesCommon); // honour search + project/tag filters
     const narrowing =
@@ -768,7 +762,6 @@
     }
     if (narrowing) groups = groups.filter((g) => g.items.length);
     groups.forEach((g) => {
-      g.cover = firstImage(g.items);
       if (g.sub == null)
         g.sub =
           g.items.length + (g.items.length === 1 ? " item" : " items");
@@ -971,8 +964,7 @@
         "files-tab tone-" +
         (i % 10) +
         (g === current ? " is-current" : "") +
-        (g.locked ? " is-locked" : "") +
-        (g.cover ? " has-cover" : "");
+        (g.locked ? " is-locked" : "");
       t.style.setProperty("--tab-x", tabX[i].toFixed(1) + "%");
       t.style.setProperty(
         "--rot",
@@ -980,7 +972,6 @@
       );
       t.style.zIndex = g.locked ? 1 : opened && g === current ? 60 : i + 2;
       t.dataset.key = g.key;
-      if (g.cover) t.style.setProperty("--cover", `url("${g.cover}")`);
       t.innerHTML = `<span class="ff-tab"><span class="ft-name">${esc(
         g.label
       )}</span><span class="ft-sub">${esc(g.sub)}</span></span>`;
@@ -1003,10 +994,6 @@
     // ---- opened folder: one full-page face with its contents ----
     const face = document.createElement("div");
     face.className = "files-face tone-" + (currentIdx % 10);
-    if (current.cover) {
-      face.classList.add("has-cover");
-      face.style.setProperty("--cover", `url("${current.cover}")`);
-    }
     face.innerHTML = `
       <div class="fp-head">
         <span class="fp-name">${esc(current.label)}</span>

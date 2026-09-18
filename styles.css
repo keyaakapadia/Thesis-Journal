@@ -1056,17 +1056,29 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 .files-empty-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
 .files-none { font-size: 13px; color: var(--ink-soft); }
 
-/* colour tones — same cycled palette for panel + tabs */
-.tone-0:not(.has-cover) { --bgc: var(--f0); --fg: var(--f0-ink); }
-.tone-1:not(.has-cover) { --bgc: var(--f1); --fg: var(--f1-ink); }
-.tone-2:not(.has-cover) { --bgc: var(--f2); --fg: var(--f2-ink); }
-.tone-3:not(.has-cover) { --bgc: var(--f3); --fg: var(--f3-ink); }
-.tone-4:not(.has-cover) { --bgc: var(--f4); --fg: var(--f4-ink); }
-.tone-5:not(.has-cover) { --bgc: var(--f5); --fg: var(--f5-ink); }
-.tone-6:not(.has-cover) { --bgc: var(--f6); --fg: var(--f6-ink); }
-.tone-7:not(.has-cover) { --bgc: var(--f7); --fg: var(--f7-ink); }
-.tone-8:not(.has-cover) { --bgc: var(--f8); --fg: var(--f8-ink); }
-.tone-9:not(.has-cover) { --bgc: var(--f9); --fg: var(--f9-ink); }
+/* colour tones — same cycled palette for panel + tabs.
+   Named on both hosts so these beat the --bgc/--fg fallbacks that
+   .files-tab and .files-face set for themselves further down. */
+.files-tab.tone-0,
+.files-face.tone-0 { --bgc: var(--f0); --fg: var(--f0-ink); }
+.files-tab.tone-1,
+.files-face.tone-1 { --bgc: var(--f1); --fg: var(--f1-ink); }
+.files-tab.tone-2,
+.files-face.tone-2 { --bgc: var(--f2); --fg: var(--f2-ink); }
+.files-tab.tone-3,
+.files-face.tone-3 { --bgc: var(--f3); --fg: var(--f3-ink); }
+.files-tab.tone-4,
+.files-face.tone-4 { --bgc: var(--f4); --fg: var(--f4-ink); }
+.files-tab.tone-5,
+.files-face.tone-5 { --bgc: var(--f5); --fg: var(--f5-ink); }
+.files-tab.tone-6,
+.files-face.tone-6 { --bgc: var(--f6); --fg: var(--f6-ink); }
+.files-tab.tone-7,
+.files-face.tone-7 { --bgc: var(--f7); --fg: var(--f7-ink); }
+.files-tab.tone-8,
+.files-face.tone-8 { --bgc: var(--f8); --fg: var(--f8-ink); }
+.files-tab.tone-9,
+.files-face.tone-9 { --bgc: var(--f9); --fg: var(--f9-ink); }
 
 /* ================= REST STATE: colour bands, each with a poking tab ================= */
 .files-tabrow {
@@ -1196,13 +1208,6 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   text-align: center;
 }
 
-.files-tab.has-cover {
-  background-color: #0e140c;
-  background-image: var(--cover);
-  background-size: cover;
-  background-position: center;
-  --fg: #fff;
-}
 .files-tab.is-locked {
   flex: 0 0 auto;
   border: 0;
@@ -1245,13 +1250,6 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
   overflow: hidden;
   box-shadow: 0 -12px 28px -18px rgba(20, 20, 30, 0.45);
   transition: background 0.34s ease, color 0.34s ease;
-}
-.files-face.has-cover {
-  background-color: #0e140c;
-  background-image: var(--cover);
-  background-size: cover;
-  background-position: center;
-  --fg: #fff;
 }
 .fp-head {
   flex: 0 0 auto;
