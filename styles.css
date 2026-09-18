@@ -1435,3 +1435,40 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 }
 
 [hidden] { display: none !important; }
+
+/* a video attachment plays where an image would have sat */
+.attach-video {
+  max-width: 100%;
+  width: 520px;
+  border-radius: 10px;
+  background: #000;
+  display: block;
+}
+
+/* ---------- password gate ---------- */
+
+.is-locked body > :not(.gate) { display: none !important; }
+
+.gate {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+}
+.gate-title { margin: 0 0 12px; }
+.gate-label { font-size: 0.85rem; opacity: 0.7; }
+.gate-input {
+  width: min(280px, 100%);
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--bg-raise);
+  border: 1px solid var(--accent-soft);
+  border-radius: 6px;
+}
+.gate-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.gate-error { margin: 0; font-size: 0.85rem; color: var(--accent); }

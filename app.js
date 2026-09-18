@@ -268,6 +268,24 @@
       .join("");
   }
 
+  // An attachment is an image, a video, or a file to download. dataUrl is
+  // either a real data: URL or a path relative to the page — a screen
+  // recording is far too big to sit inside data.json, so it lives next to it
+  // in its week folder and is pointed at instead.
+  function attachHTML(a, i) {
+    if (a.isVideo)
+      return `<video class="attach-video" src="${a.dataUrl}" controls preload="metadata"${
+        a.poster ? ` poster="${a.poster}"` : ""
+      }></video>`;
+    if (a.isImage)
+      return `<img class="thumb" src="${a.dataUrl}" alt="${esc(
+        a.name
+      )}" data-att="${i}">`;
+    return `<a class="file-chip" href="${a.dataUrl}" target="_blank" rel="noopener" download="${esc(
+      a.name
+    )}">▤ ${esc(a.name)}</a>`;
+  }
+
   function fileToDataURL(file) {
     return new Promise((res, rej) => {
       const r = new FileReader();
@@ -531,15 +549,7 @@
       ...(e.tags || []).map((t) => `<span class="pill tag">${esc(t)}</span>`),
     ].join("");
 
-    const atts = (e.attachments || [])
-      .map((a, i) =>
-        a.isImage
-          ? `<img class="thumb" src="${a.dataUrl}" alt="${esc(a.name)}" data-att="${i}">`
-          : `<a class="file-chip" href="${a.dataUrl}" target="_blank" rel="noopener" download="${esc(
-              a.name
-            )}">▤ ${esc(a.name)}</a>`
-      )
-      .join("");
+    const atts = (e.attachments || []).map((a, i) => attachHTML(a, i)).join("");
 
     const title =
       e.title ||
@@ -1031,23 +1041,18 @@
         const detail = document.createElement("div");
         detail.className = "folder-detail";
         detail.hidden = true;
-        const attachHTML = (e.attachments || [])
-          .map((a, i) =>
-            a.isImage
-              ? `<img class="thumb" src="${a.dataUrl}" alt="${esc(
-                  a.name
-                )}" data-att="${i}">`
-              : `<a class="file-chip" href="${a.dataUrl}" target="_blank" rel="noopener" download="${esc(
-                  a.name
-                )}">▤ ${esc(a.name)}</a>`
-          )
+        const attachMarkup = (e.attachments || [])
+          .map((a, i) => attachHTML(a, i))
           .join("");
-        detail.innerHTML = `<div class="entry-note">${
-          e.note
-            ? noteHTML(e.note)
-            : `<span class="note-line" style="opacity:.5">No notes yet.</span>`
-        }</div>${
-          attachHTML ? `<div class="entry-attach">${attachHTML}</div>` : ""
+        // an entry that is only a video or only a picture has nothing missing,
+        // so it does not get told it has no notes
+        const noteMarkup = e.note
+          ? `<div class="entry-note">${noteHTML(e.note)}</div>`
+          : attachMarkup
+          ? ""
+          : `<div class="entry-note"><span class="note-line" style="opacity:.5">No notes yet.</span></div>`;
+        detail.innerHTML = `${noteMarkup}${
+          attachMarkup ? `<div class="entry-attach">${attachMarkup}</div>` : ""
         }`;
         detail
           .querySelectorAll(".thumb")

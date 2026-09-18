@@ -1,4 +1,7 @@
-# screen recordings: kept in the week folders, too big for git (GitHub caps at 100MB)
-*.mov
-*.mp4
 .DS_Store
+
+# the full-size screen recordings: kept in the week folder, too big for git.
+# the small "Loom walkthrough.mov" next to them is committed on purpose, so the
+# published journal can play it.
+Week 4/Loom_256.mov
+Week 4/Loom walkthrough (720p).mov
