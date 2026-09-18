@@ -6,12 +6,15 @@ Source files for this week live in this folder. The list below is generated from
 
 ## Journal
 
+- **256 Feedback from Joe** — 2026-09-18 · Journal
 - **Loom (256 Project)** — 2026-09-18 · Journal · https://keyaakapadia.github.io/256_Project_Website/
 
 ## References
 
 - **Loom (256 Project) — Design Decisions** — 2026-09-18 · Document · https://keyaakapadia.github.io/256_Project_Website/
+- **Loom walkthrough (screen recording)** — 2026-09-18 · Document · file: Loom walkthrough, opening frame.jpg
+- **The Approval Matrix (New York Magazine)** — 2026-09-18 · Design reference · New York Magazine · https://nymag.com/article/the-approval-matrix-2025.html
 
 ## Files in this folder
 
-_None yet._
+- `Loom walkthrough (720p).mov`

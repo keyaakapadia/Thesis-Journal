@@ -1,1 +1,4 @@
+# screen recordings: kept in the week folders, too big for git (GitHub caps at 100MB)
+*.mov
+*.mp4
 .DS_Store

@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "thesis-journal", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4173"], "port": 4173 }
+    { "name": "thesis-journal", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4173"], "port": 4173 },
+    { "name": "loom", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4180", "--directory", "/Users/keyaa/Desktop/Thesis/256 Project Website"], "port": 4180 }
   ]
 }
