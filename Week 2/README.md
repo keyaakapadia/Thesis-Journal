@@ -26,6 +26,7 @@ Source files for this week live in this folder. The list below is generated from
 - **How to Do Nothing: Resisting the Attention Economy** — 2026-09-09 · Reading · Jenny Odell
 - **Mixam** — 2026-09-09 · Resource · https://mixam.com/
 - **Refusal of Work** — 2026-09-09 · Reading
+- **Tao Te Ching / wu wei (无为)** — 2026-09-09 · Reading · Laozi · https://en.wikipedia.org/wiki/Wu_wei
 
 ## Files in this folder
 
