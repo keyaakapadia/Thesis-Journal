@@ -7,7 +7,7 @@ Source files for this week live in this folder. The list below is generated from
 ## Journal
 
 - **Ideas for 256 Project** — 2026-08-28 · Journal
-- **Andrew Office Hours Notes (09/02)** — 2026-09-02 · Journal
+- **Andrew’s Office Hours Notes (09/02)** — 2026-09-02 · Journal
 
 ## References
 

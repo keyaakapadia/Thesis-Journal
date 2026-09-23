@@ -7,7 +7,7 @@ Source files for this week live in this folder. The list below is generated from
 ## Journal
 
 - **256 feedback** — 2026-09-11 · Journal
-- **Andrew Office Hours Notes (09/16)** — 2026-09-16 · Journal
+- **Andrew’s Office Hours Notes (09/16)** — 2026-09-16 · Journal
 
 ## References
 

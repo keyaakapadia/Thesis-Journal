@@ -8,6 +8,7 @@ Source files for this week live in this folder. The list below is generated from
 
 - **256 Feedback from Joe** — 2026-09-18 · Journal
 - **Loom (256 Project)** — 2026-09-18 · Journal · https://keyaakapadia.github.io/256_Project_Website/
+- **Andrew’s Office Hours Notes (09/23)** — 2026-09-23 · Journal
 
 ## References
 
@@ -29,7 +30,6 @@ Source files for this week live in this folder. The list below is generated from
 
 - `Classwork mind map (18 September).jpg`
 - `Loom walkthrough (720p).mov`
-- `Loom walkthrough.mov`
 - `Loom_256.mov`
 - `Mind map refreshed (weekend).png`
 - `loom-walkthrough-17sep-archived.mp4`

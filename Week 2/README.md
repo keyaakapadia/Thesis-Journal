@@ -7,7 +7,7 @@ Source files for this week live in this folder. The list below is generated from
 ## Journal
 
 - **Feedback on 256 Part 1 (for Part 2)** — 2026-09-04 · Journal
-- **Andrew Office Hours Notes (09/09)** — 2026-09-09 · Journal
+- **Andrew’s Office Hours Notes (09/09)** — 2026-09-09 · Journal
 - **256 Project Part 2 (1:1 Feedback with Joe)** — 2026-09-10 · Journal
 
 ## References
