@@ -1,8 +1,7 @@
 .DS_Store
 
 # the full-size screen recordings: kept in the week folder, too big for git.
-# the small "Loom walkthrough.mov" next to them is committed on purpose, so the
-# published journal can play it.
+# the small mp4s next to them are committed on purpose, so the published
+# journal can play them in the page.
 Week 4/Loom_256.mov
 Week 4/Loom walkthrough (720p).mov
-Week 4/Loom walkthrough 20 September (6m34).mov
