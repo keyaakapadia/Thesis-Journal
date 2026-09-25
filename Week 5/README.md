@@ -6,7 +6,7 @@ Source files for this week live in this folder. The list below is generated from
 
 ## Journal
 
-- **Graphic Strategies — Class Work** — 2026-09-25 · Journal
+- **Graphic Strategies — Class Work** — 2026-09-25 · Journal · file: 10 pairs, classwork.jpg · file: Pin up, 5x5x5.jpg
 
 ## References
 
@@ -14,4 +14,5 @@ _None._
 
 ## Files in this folder
 
-_None yet._
+- `10 pairs, classwork.jpg`
+- `Pin up, 5x5x5.jpg`
