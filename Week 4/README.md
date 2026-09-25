@@ -9,6 +9,7 @@ Source files for this week live in this folder. The list below is generated from
 - **256 Feedback from Joe** — 2026-09-18 · Journal
 - **Loom (256 Project)** — 2026-09-18 · Journal · https://keyaakapadia.github.io/256_Project_Website/
 - **Andrew’s Office Hours Notes (09/23)** — 2026-09-23 · Journal
+- **5 x 5 x 5 — Initial Ideation** — 2026-09-24 · Journal
 
 ## References
 
