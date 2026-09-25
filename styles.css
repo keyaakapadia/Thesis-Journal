@@ -1472,3 +1472,36 @@ body.view-files .toolbar-end { gap: 8px; flex: 0 0 auto; }
 }
 .gate-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .gate-error { margin: 0; font-size: 0.85rem; color: var(--accent); }
+
+/* Foldable note sections: a bold heading on its own line becomes a summary
+   you click to open. Collapsed by default so a long entry reads as a list of
+   its parts first. */
+.entry-note .note-sec { margin: 0.9em 0 0; }
+.entry-note .note-sec > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: 0.15em 0;
+}
+.entry-note .note-sec > summary::-webkit-details-marker { display: none; }
+.entry-note .note-sec > summary::before {
+  content: "+";
+  color: var(--ink-faint);
+  font-size: 0.85em;
+  width: 0.8em;
+}
+.entry-note .note-sec[open] > summary::before { content: "–"; }
+.entry-note .note-sec > summary:hover strong { text-decoration: underline; }
+.entry-note .note-sec > div { padding-left: 1.3em; }
+.entry-note .note-sec .note-sec { margin-top: 0.5em; }
+.folder-detail .entry-note .note-sec > summary::before { color: #000; }
+.entry-note .note-att { margin: 0.6em 0; }
+.entry-note .note-att .thumb {
+  width: min(100%, 440px);
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  display: block;
+}

@@ -252,20 +252,74 @@
       .replace(/\u0000(\d+)\u0000/g, (whole, i) => held[+i]);
   }
 
-  function noteHTML(text) {
-    return esc(text)
+  function noteLineHTML(ln) {
+    const m = ln.match(/^([ \t]*)(?:[-–—>•]|&gt;|↳)\s+(.*)$/);
+    if (!m) return `<span class="note-line">${noteInline(ln)}</span>`;
+    // leading indent → nesting depth (every 2 spaces / 1 tab = one level in)
+    const indent = m[1].replace(/\t/g, "  ").length;
+    const depth = Math.min(3, Math.floor(indent / 2) + 1);
+    return `<span class="note-sub note-sub-${depth}">${noteInline(m[2])}</span>`;
+  }
+
+  // A line that is nothing but a short **bold** phrase is a heading, and
+  // everything under it folds away behind it. "Part I…" headings hold the
+  // smaller headings that follow them, so a long entry opens one piece at a
+  // time instead of all at once. A bold sentence (one that ends in . ? !) is
+  // a key point, not a heading, so it is left where it is.
+  function noteHeading(ln) {
+    const m = ln.match(/^\*\*(.{1,90}?)\*\*$/);
+    if (!m || /[.?!]$/.test(m[1])) return null;
+    return { text: m[1], top: /^part\b/i.test(m[1]) };
+  }
+
+  // [[att:id]] on a line of its own drops that attachment into the note where
+  // it is written, instead of leaving it in the row at the foot of the entry.
+  const ATT_REF = /^\[\[att:([a-zA-Z0-9_-]+)\]\]$/;
+  function noteAttIds(text) {
+    const ids = new Set();
+    String(text || "")
       .split("\n")
-      .map((ln) => {
-        const m = ln.match(/^([ \t]*)(?:[-–—>•]|&gt;|↳)\s+(.*)$/);
-        if (!m) return `<span class="note-line">${noteInline(ln)}</span>`;
-        // leading indent → nesting depth (every 2 spaces / 1 tab = one level in)
-        const indent = m[1].replace(/\t/g, "  ").length;
-        const depth = Math.min(3, Math.floor(indent / 2) + 1);
-        return `<span class="note-sub note-sub-${depth}">${noteInline(
-          m[2]
-        )}</span>`;
-      })
-      .join("");
+      .forEach((ln) => {
+        const m = ln.trim().match(ATT_REF);
+        if (m) ids.add(m[1]);
+      });
+    return ids;
+  }
+
+  function noteHTML(text, atts) {
+    const all = atts || [];
+    const lines = esc(text).split("\n");
+    let out = "";
+    const open = []; // headings still awaiting their </details>
+    const close = (toTop) => {
+      while (open.length && (toTop || !open[open.length - 1].top)) {
+        open.pop();
+        out += "</div></details>";
+      }
+    };
+
+    lines.forEach((ln) => {
+      const ref = ln.trim().match(ATT_REF);
+      if (ref) {
+        const i = all.findIndex((a) => a.id === ref[1]);
+        if (i > -1) {
+          out += `<div class="note-att">${attachHTML(all[i], i)}</div>`;
+          return;
+        }
+      }
+      const h = noteHeading(ln);
+      if (!h) {
+        out += noteLineHTML(ln);
+        return;
+      }
+      close(h.top);
+      open.push(h);
+      out += `<details class="note-sec${
+        h.top ? " note-sec-top" : ""
+      }"><summary>${noteInline(`**${h.text}**`)}</summary><div>`;
+    });
+    close(true);
+    return out;
   }
 
   // An attachment is an image, a video, or a file to download. dataUrl is
@@ -549,7 +603,10 @@
       ...(e.tags || []).map((t) => `<span class="pill tag">${esc(t)}</span>`),
     ].join("");
 
-    const atts = (e.attachments || []).map((a, i) => attachHTML(a, i)).join("");
+    const inlined = noteAttIds(e.note);
+    const atts = (e.attachments || [])
+      .map((a, i) => (inlined.has(a.id) ? "" : attachHTML(a, i)))
+      .join("");
 
     const title =
       e.title ||
@@ -564,7 +621,7 @@
             : ""
         }</h3>
         ${meta.length ? `<div class="entry-meta">${meta.join('<span class="dot">·</span>')}</div>` : ""}
-        ${e.note ? `<div class="entry-note">${noteHTML(e.note)}</div>` : ""}
+        ${e.note ? `<div class="entry-note">${noteHTML(e.note, e.attachments)}</div>` : ""}
         ${pills ? `<div class="entry-tags">${pills}</div>` : ""}
         ${atts ? `<div class="entry-attach">${atts}</div>` : ""}
       </div>
@@ -1041,13 +1098,14 @@
         const detail = document.createElement("div");
         detail.className = "folder-detail";
         detail.hidden = true;
+        const inlinedAtts = noteAttIds(e.note);
         const attachMarkup = (e.attachments || [])
-          .map((a, i) => attachHTML(a, i))
+          .map((a, i) => (inlinedAtts.has(a.id) ? "" : attachHTML(a, i)))
           .join("");
         // an entry that is only a video or only a picture has nothing missing,
         // so it does not get told it has no notes
         const noteMarkup = e.note
-          ? `<div class="entry-note">${noteHTML(e.note)}</div>`
+          ? `<div class="entry-note">${noteHTML(e.note, e.attachments)}</div>`
           : attachMarkup
           ? ""
           : `<div class="entry-note"><span class="note-line" style="opacity:.5">No notes yet.</span></div>`;
