@@ -267,9 +267,13 @@
   // time instead of all at once. A bold sentence (one that ends in . ? !) is
   // a key point, not a heading, so it is left where it is.
   function noteHeading(ln) {
-    const m = ln.match(/^\*\*(.{1,90}?)\*\*$/);
-    if (!m || /[.?!]$/.test(m[1])) return null;
-    return { text: m[1], top: /^part\b/i.test(m[1]) };
+    const m = ln.match(/^([ \t]*)\*\*(.{1,90}?)\*\*$/);
+    if (!m || /[.?!]$/.test(m[2])) return null;
+    // indent the heading by two spaces per level to tuck it inside the one
+    // above it; a "Part …" heading is always a top-level one.
+    const indent = m[1].replace(/\t/g, "  ").length;
+    const level = /^part\b/i.test(m[2]) ? 0 : Math.floor(indent / 2);
+    return { text: m[2], level };
   }
 
   // [[att:id]] on a line of its own drops that attachment into the note where
@@ -291,8 +295,8 @@
     const lines = esc(text).split("\n");
     let out = "";
     const open = []; // headings still awaiting their </details>
-    const close = (toTop) => {
-      while (open.length && (toTop || !open[open.length - 1].top)) {
+    const close = (level) => {
+      while (open.length && open[open.length - 1].level >= level) {
         open.pop();
         out += "</div></details>";
       }
@@ -312,13 +316,13 @@
         out += noteLineHTML(ln);
         return;
       }
-      close(h.top);
+      close(h.level);
       open.push(h);
-      out += `<details class="note-sec${
-        h.top ? " note-sec-top" : ""
-      }"><summary>${noteInline(`**${h.text}**`)}</summary><div>`;
+      out += `<details class="note-sec note-sec-${h.level}"><summary>${noteInline(
+        `**${h.text}**`
+      )}</summary><div>`;
     });
-    close(true);
+    close(0);
     return out;
   }
 
