@@ -267,7 +267,7 @@
   // time instead of all at once. A bold sentence (one that ends in . ? !) is
   // a key point, not a heading, so it is left where it is.
   function noteHeading(ln) {
-    const m = ln.match(/^([ \t]*)\*\*(.{1,90}?)\*\*$/);
+    const m = ln.match(/^([ \t]*)\*\*(.{1,160}?)\*\*$/);
     if (!m || /[.?!]$/.test(m[2])) return null;
     // indent the heading by two spaces per level to tuck it inside the one
     // above it; a "Part …" heading is always a top-level one.
@@ -1293,17 +1293,17 @@
 
   /* ---------- lightbox ---------- */
 
-  function openLightbox(att, entry) {
+  // The lightbox is for looking at the picture, so nothing is printed under
+  // it — the note sits in the entry you came from.
+  function openLightbox(att) {
     if (!att) return;
     $("#lightboxImg").src = att.dataUrl;
     $("#lightboxImg").alt = att.name || "";
-    const bits = [entry.title || att.name];
-    if (entry.projects && entry.projects.length)
-      bits.push(entry.projects.map((p) => PROJECT_LABEL[p] || p).join(", "));
-    if (entry.tags && entry.tags.length)
-      bits.push(entry.tags.join(" "));
-    if (entry.note) bits.push(entry.note);
-    $("#lightboxCaption").textContent = bits.filter(Boolean).join("   ·   ");
+    const cap = $("#lightboxCaption");
+    if (cap) {
+      cap.textContent = "";
+      cap.hidden = true;
+    }
     $("#lightbox").hidden = false;
   }
   function closeLightbox() {
