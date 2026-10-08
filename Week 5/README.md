@@ -6,7 +6,7 @@ Source files for this week live in this folder. The list below is generated from
 
 ## Journal
 
-- **Graphic Strategies — Class Work** — 2026-09-25 · Journal · file: 10 pairs, classwork.jpg · file: Pin up, 5x5x5.jpg
+- **Graphic Strategies — Class Work** — 2026-09-25 · Journal · file: 10 pairs, classwork.jpg · file: Pin up, 5x5x5.jpg · file: Graphique Strategies — Part III, Written Proposal.pdf · file: Graphique Strategies — Proposal deck.pdf
 - **Andrew’s Office Hours Notes (09/30)** — 2026-09-30 · Journal
 
 ## References
@@ -27,4 +27,6 @@ Source files for this week live in this folder. The list below is generated from
 ## Files in this folder
 
 - `10 pairs, classwork.jpg`
+- `Graphique Strategies — Part III, Written Proposal.pdf`
+- `Graphique Strategies — Proposal deck.pdf`
 - `Pin up, 5x5x5.jpg`
