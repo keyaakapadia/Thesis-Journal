@@ -6,6 +6,7 @@ Source files for this week live in this folder. The list below is generated from
 
 ## Journal
 
+- **Dinah's Feedback on the Three Proposals** — 2026-10-02 · Journal
 - **Prototype 1: Iteration So Far (Week 6)** — 2026-10-08 · Journal · file: Prototype 1 — Draft 1, version 1.pdf · file: Prototype 1 — Draft 1, version 2.pdf · file: Prototype 1 — Draft 2A, Proceedings.pdf · file: Prototype 1 — Draft 4, Paper pass (spreads).pdf · file: Prototype 1 — Draft 4, Vellum pass (spreads).pdf · file: Prototype 1 — Draft 4, Overlay preview (spreads).pdf · file: Prototype 1 — Draft 4, Erasure pass (spreads).pdf
 
 ## References
