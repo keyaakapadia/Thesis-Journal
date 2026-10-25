@@ -1,7 +1,7 @@
 {
   "app": "thesis-journal",
   "version": 3,
-  "updated": "2026-10-09T12:00:00.000Z",
+  "updated": "2026-10-21T12:00:00.000Z",
   "entries": [
     {
       "id": "w1-256-notes-8k2p1",
@@ -1236,6 +1236,251 @@
       ],
       "date": "2026-10-09",
       "dateAdded": "2026-10-09T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "joe-feedback-residue-week7",
+      "kind": "journal",
+      "title": "Joe's Feedback on Residue (Week 7)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Week 7 class feedback on the residue proposals, from Joe and my peers. The main push from Joe: go beyond the clipboard alone. [[clipboard-book-research]] [[clipboard-book-schematic-design]]\n\n**The main push**\n- Keep the strong clipboard experiment, but test whether other forms of residue, and a different visual treatment, make the invisible / ephemeral idea clearer.\n\n**1. Broaden what counts as residue (Joe)**\n- Put the clipboard alongside other intangible traces: deleted text, the laptop's heat (\"how hot the laptop gets shows how hard you're working\"), and daily memory usage.\n- He floated a book with three or four chapters, each covering a different trace.\n- His point: the larger topic becomes clearer when readers see more than one example. It could also add visual variety.\n- He called the clipboard experiment \"such a strong idea\" and said not to be precious about choosing one idea over the other.\n\n**2. Protect privacy if I revisit deletions (Joe)**\n- When I described friends' texts appearing in the screen recording, he suggested I could edit out their messages, while acknowledging why it felt intrusive.\n\n**3. Question the reading-time highlighting (peers)**\n- They weren't sure that estimating how much of a copied passage was read is central to the idea.\n- They wanted to see the content clearly, and said the highlight / grey-out treatment needs explaining, or might not be necessary.\n\n**4. Make a deliberate choice about time (peers)**\n- One peer said I might not need to show the hours I'm not using the laptop if the project tracks online activity.\n- If I do want a full 24-hour record, they suggested a consistent time-to-space rule, with long gaps becoming meaningful white space.\n\n**5. Push the visualization beyond a familiar layout (peers)**\n- The pages were legible but somewhat expected, like a chat history. A peer suggested showing the same data in less conventional ways, perhaps making readers look for patterns.\n- The MoMA data-visualization exhibition was raised as a reference.\n\n**Next**\n- Decide which other traces could sit beside the clipboard (deleted text, laptop heat, memory usage) and whether they become chapters.\n- Decide whether the reading-time fade stays, and if so how the key explains it.\n- Settle on a time-to-space rule.\n- Try at least one less chat-like layout.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "joe",
+        "feedback",
+        "residue",
+        "clipboard",
+        "week 7"
+      ],
+      "date": "2026-10-13",
+      "dateAdded": "2026-10-13T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "prototype-1-draft-8-residue",
+      "kind": "journal",
+      "title": "Prototype 1, Draft 8: Residue (Week 7)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Week 7. One version of the book so far, made after Joe's feedback. It follows his push to go beyond the clipboard. [[joe-feedback-residue-week7]] Earlier thinking: [[clipboard-book-schematic-design]] [[prototype-1-iteration-week6]]. The PDF is attached.\n\n**What it is**\n- *Residue: a week of traces, minute by minute.* A 98-page book, 270 x 540 pt (1:2), built with basil.js in InDesign from a local logger's data.\n- **Four chapters, four traces:** clipboard, deleted text, heat and notifications. This is the three-or-four-chapter book Joe floated, with memory usage not included yet.\n- Each chapter has a title page with a key and a week overview, then one spread per day for six days (10–15 October).\n\n**The system**\n- One rule for every chapter: a row is an hour, a column is a minute, a mark is an event. Empty is empty.\n- On each day the left page is the timeline and the right page is a ledger for the same day, on the same rows.\n- All 24 hours are shown every day, so a long gap becomes white space. This is my answer to the time-to-space feedback.\n- One colour family per chapter. Inside a family, deeper means more common and grey means everything else. Heat is the exception and uses a cold-to-hot ramp.\n- The clipboard marks are coloured by the site in front, not by an estimate of how much was read. That drops the reading-time fade the peers questioned.\n\n**Privacy**\n- Only the masked text columns are used, and anything flagged sensitive is left out. Notifications are masked too.\n\n**What is real and what is simulated**\n- **Real:** clipboard, deleted text and heat for 14 and 15 October.\n- **Simulated:** all of 10–13 October in every chapter, and every notification. I filled these with invented data (`fake.js`) to design the layout against a full week. The book labels these days \"simulated data\" on the page and in the colophon.\n- Do not present this PDF as a record of a real week.\n\n**What I'm looking at next**\n- Run the logger for a full real week, so the simulated days can go.\n- Check whether the minute-by-hour grid still reads like a familiar log, which was the peer concern. The cover and week pages are a step away from it, but the day spreads are still quite regular.\n- Add the memory-usage trace if it earns a chapter, and make the notification logger work.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "residue",
+        "draft 8",
+        "clipboard",
+        "heat",
+        "notifications",
+        "deleted text",
+        "week 7"
+      ],
+      "date": "2026-10-15",
+      "dateAdded": "2026-10-15T12:00:00.000Z",
+      "attachments": [
+        {
+          "id": "att-p1-draft8-residue",
+          "name": "Prototype 1 — Draft 8, Residue.pdf",
+          "type": "application/pdf",
+          "size": 5256457,
+          "dataUrl": "Week%207/Prototype%201%20%E2%80%94%20Draft%208%2C%20Residue.pdf",
+          "isImage": false,
+          "isVideo": false
+        }
+      ]
+    },
+    {
+      "id": "feedback-project-1-week8",
+      "kind": "journal",
+      "title": "Feedback on Project 1: Digital Residue (Week 8)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Week 8. Class feedback on Project 1 from Friday 16 October. It follows [[joe-feedback-residue-week7]] and responds to the book at the stage of [[prototype-1-draft-8-residue]], though the book presented had grown to five kinds of residue.\n\n**What I presented**\n- The project makes temporary digital activity visible in physical form, drawing attention to data I generate but normally overlook.\n- I started with external material such as Wikipedia, because documenting my own activity felt intrusive. Those experiments connected common elements with lines, but I felt I was forcing the concept.\n- Another experiment put deleted material on a separate layer or sheet.\n- Screen recording raised privacy concerns: it captured friends' messages and professors' emails, not only my own writing.\n- Clipboard tracking felt more workable, since copied material exists only until the next item replaces it. The earlier clipboard system showed source application as colour, how long content stayed as time, and repetition as density or emphasis. Earlier feedback said it was not intuitive enough.\n- The current book has **five kinds of residue**: deleted text, notifications, clipboard contents, memory usage and heat. I had roughly five or six days of activity. It is organized by data type, from fleeting traces toward more persistent ones, with text records and visualizations.\n\n**1. Test organizing by day**\n- Grouping by type emphasizes the differences between categories. Grouping by day could reveal the experience of using the computer: what happened together, what overlapped, and how one day differed from another.\n- A diary or calendar structure lets readers meet all five kinds of data from one day together, without jumping between chapters to rebuild a date.\n- Dense and quiet days would look different, which could make the book more personal and less monotonous.\n- **Alternative:** introduce one complete day with all five categories, then move into category sections. That sets context before readers look at each type.\n- **Caution:** don't overcomplicate it. Choose a clear organizing principle.\n\n**2. Show coexistence and simultaneity**\n- Separating everything too neatly loses some of the richness of digital activity.\n- Five colours can distinguish the categories while letting them share a spread.\n- Ideas: indent an event when it happens alongside another, layer or overlap material, alternate record types, and use spatial relationships to show timing.\n- The design challenge is setting deliberate rules for these relationships.\n\n**3. Readability does not have to be uniform**\n- The question: how important is it that readers can read every item?\n- Some sections can prioritize clarity. Others can communicate speed, volume or overload through density and partial illegibility.\n- A key or index can give orientation while the main pages get more experimental.\n- Layered text might create a texture that shows how much happens at once.\n- Scale, overlap, spacing and legibility should follow the project's intention.\n\n**4. The visualizations**\n- They felt controlled, quiet and linear, which may not convey the intensity of what was recorded. Earlier experiments had an energy worth bringing back.\n- The point is not to make everything messy, but to add variation and dynamism. Five sets of bars side by side is not necessarily the answer.\n- **Key question: what should the visualization contribute to this book?** Precise quantities, a pattern, the experience of digital activity, or something the text alone doesn't show? The answer sets how readable, conventional or expressive it should be.\n- A 24-hour timeline is only one lens. Others include frequently deleted words. The visualization and text don't have to explain each other item by item, and can offer different views that add up.\n- If I use a clear analytical chart, it should explain something I actually want readers to understand.\n\n**5. Deleted words without their context**\n- I worried that isolated deleted words don't explain the sentence they came from. The feedback was that this isn't necessarily a problem.\n- Typos and fragments are interesting on their own, and repetition exposes habits and creates recognition or humour.\n- I don't need to reproduce whole paragraphs to make each deletion understandable.\n\n**6. Comparison with another person (optional)**\n- I suggested comparing my activity as a designer with my brother's in finance. It was received as interesting, but collecting someone else's data is hard.\n- The system could serve as a template for other people.\n\n**7. Physical format and volume**\n- The quantity of material was seen as a strength. The book is about 158 pages.\n- Flipping through a physical book makes accumulation and repetition easier to notice than single pages on screen. Readers may spot repeated words themselves.\n- The long format got a broadly positive response and was associated with a diary. The exact comparison is unclear in the transcript.\n\n**Positive**\n- The range of iterations and trial and error was specifically praised. Moving through versions that felt wrong was recognized as part of finding the project.\n- The next task is to resolve structure and visual decisions. I don't need to pursue every extension.\n\n**Next steps**\n- Prototype one day containing all five data types.\n- Decide whether the book is organized by day or by category.\n- Set rules for colour, overlap, timing and hierarchy.\n- Decide what must stay readable.\n- Test a more dynamic visualization and an alternative analytical lens.\n- Judge the sequence with a physical mockup.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "feedback",
+        "residue",
+        "structure",
+        "visualization",
+        "week 8"
+      ],
+      "date": "2026-10-16",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-rozendaal-transit-10",
+      "kind": "design-ref",
+      "title": "Transit #10 (Rafaël Rozendaal)",
+      "author": "Rafaël Rozendaal",
+      "publication": "newrafael.com",
+      "url": "https://www.newrafael.com/transit/10",
+      "note": "Transit (2025) by Rafaël Rozendaal, code by Reinier Feijen. Responsive to any screen size; the code is stored on the Ethereum blockchain.\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-information-landscapes",
+      "kind": "design-ref",
+      "title": "Information Landscapes (Visible Language Workshop, MIT Media Lab, 1994)",
+      "author": "Muriel Cooper, David Small, Suguru Ishizaki",
+      "publication": "YouTube",
+      "url": "https://www.youtube.com/watch?v=Qn9zCrIJzLs",
+      "note": "Video from the Visible Language Workshop, MIT Media Lab, July 1994. Includes the Typographic Space project (Muriel Cooper, David Small, Suguru Ishizaki).\n- Paired with a search on Lisa Strausfeld's information landscapes: [the search](https://www.google.com/search?sca_esv=4edad2ce5cdf1c22&sxsrf=APpeQnvYlulVlBhvD08Bofn_y7CzlARqXA:1792612418086&q=lisa+strausfeld+information+landscapes&spell=1&sa=X&ved=2ahUKEwjsg5nT8cuXAxX5GVkFHfZoLOcQBSgAegQIEhAB&biw=1512&bih=949&dpr=2)\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-temkin-folders",
+      "kind": "design-ref",
+      "title": "Folders (Daniel Temkin, esolang)",
+      "author": "Daniel Temkin",
+      "publication": "danieltemkin.com",
+      "url": "https://danieltemkin.com/Esolangs/Folders/",
+      "note": "An esoteric programming language where programs are written as nested folder structures (the Hello World example is a tree of \"New Folder\"s).\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-flux-moma-receipts",
+      "kind": "design-ref",
+      "title": "Flux / MoMA receipts (search)",
+      "author": "",
+      "publication": "Google",
+      "url": "https://www.google.com/search?q=flux+moma+receipts&sourceid=chrome&source=chrome.ob&ie=UTF-8",
+      "note": "Search for Fluxus receipts at MoMA. Kept as the search link; to be replaced with the specific item once found.\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-onduygu-vital-signs",
+      "kind": "design-ref",
+      "title": "Vital Signs (Deniz Cem Önduygu)",
+      "author": "Deniz Cem Önduygu",
+      "publication": "denizcemonduygu.com",
+      "url": "https://www.denizcemonduygu.com/portfolio/vital-signs/",
+      "note": "Project page from Deniz Cem Önduygu's portfolio, opening with a quote on quantifying what can be quantified.\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-lust-pgda",
+      "kind": "design-ref",
+      "title": "LUST (People's Graphic Design Archive)",
+      "author": "LUST",
+      "publication": "People's Graphic Design Archive",
+      "url": "https://peoplesgdarchive.org/item/2292/lust",
+      "note": "Archive entry for LUST and LUSTlab, the Dutch graphic and interactive studio that closed in September 2017. Archived as a website.\n- From Andrew's office hours reference list: [[andrew-office-hours-references-1021]]",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "andrew-office-hours-references-1021",
+      "kind": "document",
+      "title": "Andrew’s Office Hours References (10/21)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "References from Andrew's office hours on 10/21. Each one also lives on its own under the category tab.\n\nReferences\n- Transit #10 (Rafaël Rozendaal): https://www.newrafael.com/transit/10\n- Information Landscapes (Visible Language Workshop, MIT Media Lab, 1994): https://www.youtube.com/watch?v=Qn9zCrIJzLs\n- Folders (Daniel Temkin, esolang): https://danieltemkin.com/Esolangs/Folders/\n- Flux / MoMA receipts (search): https://www.google.com/search?q=flux+moma+receipts&sourceid=chrome&source=chrome.ob&ie=UTF-8\n- Vital Signs (Deniz Cem Önduygu): https://www.denizcemonduygu.com/portfolio/vital-signs/\n- LUST (People's Graphic Design Archive): https://peoplesgdarchive.org/item/2292/lust",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "andrew's office hours"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "andrew-office-hours-feedback-1021",
+      "kind": "document",
+      "title": "Andrew’s Office Hours Feedback (10/21)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Feedback from Andrew's office hours on 10/21, on Residue. Reference list: [[andrew-office-hours-references-1021]]. Follows [[feedback-project-1-week8]] and [[prototype-1-draft-8-residue]].\n\n**Project focus**\n- Document the overlooked traces left by everyday laptop use: typing errors, deletions, clipboard contents, background processes / memory use, and computer heat.\n- Use my own recorded data, selectively choosing what to share.\n- Explore how these traces reveal time, activity and human presence.\n\n**Current structure and direction**\n- The first prototype separates five types of data into sections, each organized by day. That creates repetition and makes activities look independent, although they happen simultaneously.\n- Explore organizing by day, bringing the different data types together on a shared timeline.\n- Test overlap to show activities coexisting, while keeping the composition controlled.\n- One proposed spread pairs a day's combined visualization with a chronological list of entries, using different colours for different data types.\n\n**Relevant feedback**\n- The raw data and visualizations are the strongest parts.\n- Showing text beside its visualization offers two different stories about the same data. Keep that relationship visible.\n- Simplify headings, labels, navigation and divider pages so they feel quieter beside the expressive data.\n- The more rigid, catalog-like layout makes the human traces visible and invites readers to imagine a story.\n- Consider enlarging the visualizations while preserving the meaning of the 24-hour timeline and its empty spaces.\n- Print a sample to assess scale, readability and the relationship between text and graphics.\n- There is already enough raw material. Focus on composition, hierarchy and typography.\n\n**References mentioned**\n- LUST studio: suggested for complex, poetic data visualization with a controlled visual structure. Look for archived documentation if the original website is unavailable. See \"LUST (People's Graphic Design Archive)\".\n- Personal activity-tracking project, transcribed as \"Vital…\": a person records daily activities over many years and turns them into visualizations. Relevant to daily rhythms and accumulated traces. Probably \"Vital Signs (Deniz Cem Önduygu)\", to confirm.\n- Visual browsing extension: collects images hovered over while browsing and assembles a research mood board. Relevant to incidental digital residue. The extension's name was not recorded.\n- Fluxus works: mentioned in relation to combining entries and activities over time. No specific work identified. Possibly connected to \"Flux / MoMA receipts (search)\".\n- Time-visualization project, transcribed as \"Bendigown\": discussed as a way to make time spatial and navigable. The exact reference needs confirming. Possibly \"Information Landscapes (Visible Language Workshop, MIT Media Lab, 1994)\".\n\n**Next steps**\n- Develop one day as a complete spread combining multiple data types.\n- Keep the raw text and visualization together.\n- Reduce the visual weight of supporting typography.\n- Compare the separate-category version with the combined daily version.\n- Print both to judge which communicates residue and simultaneity more clearly.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "andrew's office hours",
+        "feedback",
+        "residue"
+      ],
+      "date": "2026-10-21",
+      "dateAdded": "2026-10-21T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "joe-call-1023",
+      "kind": "journal",
+      "title": "Call with Joe (Week 9)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Call with Joe on 23 October. Relates to [[prototype-1-draft-8-residue]] and [[andrew-office-hours-feedback-1021]].\n\n- Never bold sans serif.\n\nThis bears on the typography push from Andrew: simplify headings, labels and navigation so they sit quieter beside the data. Any bold needs a serif face.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "joe",
+        "feedback",
+        "typography",
+        "week 9"
+      ],
+      "date": "2026-10-23",
+      "dateAdded": "2026-10-23T12:00:00.000Z",
       "attachments": []
     }
   ],
