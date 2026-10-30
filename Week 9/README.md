@@ -10,7 +10,7 @@ Source files for this week live in this folder. The list below is generated from
 
 ## References
 
-_None._
+- **inourti.me** — 2026-10-29 · Design reference · https://inourti.me/
 
 ## Files in this folder
 

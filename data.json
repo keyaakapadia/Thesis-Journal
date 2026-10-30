@@ -1,7 +1,7 @@
 {
   "app": "thesis-journal",
   "version": 3,
-  "updated": "2026-10-21T12:00:00.000Z",
+  "updated": "2026-10-29T12:00:00.000Z",
   "entries": [
     {
       "id": "w1-256-notes-8k2p1",
@@ -1481,6 +1481,24 @@
       ],
       "date": "2026-10-23",
       "dateAdded": "2026-10-23T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "ref-inourti-me",
+      "kind": "design-ref",
+      "title": "inourti.me",
+      "author": "",
+      "publication": "inourti.me",
+      "url": "https://inourti.me/",
+      "note": "Interactive web piece. The page is nearly blank apart from the domain name and the word \"Blink\"; it has an info link, a Mute control (so it has audio) and a \"Show Diagram\" option. Creator not credited on the main page; the about page wasn't reachable.",
+      "projects": [
+        "thesis-proposal"
+      ],
+      "tags": [
+        "week 9"
+      ],
+      "date": "2026-10-29",
+      "dateAdded": "2026-10-29T12:00:00.000Z",
       "attachments": []
     }
   ],
