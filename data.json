@@ -1,7 +1,7 @@
 {
   "app": "thesis-journal",
   "version": 3,
-  "updated": "2026-10-29T12:00:00.000Z",
+  "updated": "2026-10-31T12:00:00.000Z",
   "entries": [
     {
       "id": "w1-256-notes-8k2p1",
@@ -1500,6 +1500,77 @@
       "date": "2026-10-29",
       "dateAdded": "2026-10-29T12:00:00.000Z",
       "attachments": []
+    },
+    {
+      "id": "joe-feedback-1027",
+      "kind": "document",
+      "title": "Feedback from Joe (10/27)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Feedback from Joe on Tuesday 27 October, on Residue. Follows [[andrew-office-hours-feedback-1021]] and [[joe-call-1023]]; relates to [[prototype-1-draft-8-residue]].\n\n**Layout and hierarchy**\n- Left-hand pages: framework and context. The missing piece is my voice, or another voice.\n- Chapter / day divisions need to be much clearer.\n  - Use 80pt bold Helvetica for the date on opener pages, at least as large as the data numbers.\n  - Stack it and make it dominant so the reader immediately knows where they are.\n- Right-hand pages: carry the dense data and visualizations. The current structure mostly works.\n- Summary spreads: use the left page to introduce and give insight, and fold out the right page for wide graphs.\n  - Consider a black background with white text on summary pages to signal a mode shift.\n\n**Voice, editorializing and color**\n- Takeaways or editorial notes on day-opener pages (or at the end of a day): narrative, poetic, stream-of-consciousness.\n  - Doesn't need to happen on every page, but gives an entry point and substantiates the data.\n  - Especially important since the project used AI-assisted code (Basel.js via Claude): my voice adds integrity and meaning.\n- The color palette feels slightly default and office-y; worth rethinking before final binding.\n  - Reference: Joost Grootens' book on information design, pastel-heavy with restrained saturation.\n  - Goal: colors should family well, provide hierarchy and stay legible; even out the saturation (some purples go too dark, orange too light).\n\n**Binding, print and timeline**\n- Tabloid spread (~17x17 when open) is the right call; foldout pages will go even wider.\n- Binding dilemma: spiral vs. perfect vs. tape.\n  - Spiral: strong, reliable default, but the spine gap may interrupt spreads.\n  - Perfect: more compact feel, but 300 pages risks falling apart.\n  - Tape: may undercut the stripped-down aesthetic.\n  - Recommendation: make blank dummies in both spiral and perfect before committing.\n- Priority: get the design tight first; a loosely bound copy is fine for Friday's crit.\n  - Joe will FaceTime in via Dinah on Friday to see it.\n\n**Next steps**\n- Add large date headers to day-opener pages on the right spreads that start a new day, with the sentence as a subtitle at the same size as the stats font: 80pt bold Helvetica, stacked, at least as large as the data numbers already on the page.\n- Add editorial voice or a takeaway to some day pages, on the summary pages of every chapter or elsewhere. Narrative or poetic; doesn't need to be on every page but should feel distinct from the data.\n- Rework summary spreads as foldouts with a left-page intro. Consider a black background and white text to signal summary mode.\n- Revisit the color palette before final binding: look through the book, find a logic, and use it to pick a scheme that prints well on a laser printer. Look at Joost Grootens' book; aim for quieter, more even saturation with clear hierarchy.\n- Make blank dummies in spiral and perfect binding and test both before committing; spiral is the likely default but worth comparing.\n- Print and bring in a copy by Friday. Loosely bound is fine; Joe will FaceTime in via Dinah to review.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "joe",
+        "feedback",
+        "week 9"
+      ],
+      "date": "2026-10-27",
+      "dateAdded": "2026-10-27T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "andrew-office-hours-feedback-1028",
+      "kind": "document",
+      "title": "Andrew’s Office Hours Feedback (10/28)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Feedback from Andrew LeClair's office hours on Wednesday 28 October, on Residue. Follows [[andrew-office-hours-feedback-1021]] and [[joe-feedback-1027]]; relates to [[prototype-1-draft-8-residue]].\n\n**Overall**\n- Positive. He said \"Cool, this looks great,\" called the current hierarchy \"a good level,\" and said it felt \"a lot more restrained, a lot more purposeful.\"\n- He liked the cover and spine, calling the version shown his \"favorite iteration.\"\n- His concerns were the copy, how the book will print, and binding a still-revisable prototype, not the overall direction.\n\n**What I showed**\n- A 388-page book visualizing residual data from my laptop: deletions, copied-and-pasted material, notifications, heat and memory. The pages move through each day, with statistics at the end of the day and written insights alongside the visualizations.\n- Different visual treatments of the same data, dictionary-like tabs along the edge, and a weekly summary at the end. I planned foldout pages for the final eight summary pages because the content felt compressed into a spread.\n\n**Design feedback**\n- Hierarchy: an earlier, nearly uniform-text version felt too stripped back. After adding hierarchy and an H1, the balance felt right, not too much.\n- White and light-gray pages: I was hesitant about making facing pages read differently. Since they contain different content, the distinction could make sense, but I need to see how it feels in print.\n- Writing: \"DLLify your language\" (as transcribed). Phrasing like \"all landed\" can sound clichéd and make people stop paying attention. Treated as readily fixable.\n- Reference: look at Joost Grootens for his precise work in visualization and mapping, as \"visual food,\" not something to emulate directly.\n\n**Printing and binding**\n- My main worry: how to bind a book this thick, what it will cost, and whether it might fall apart.\n- Sewn binding was suggested as durable and potentially beautiful for the final book, though it takes more work.\n- For Friday's prototype: print the signatures without committing to final binding, inspect the physical result (including whether the gutter is too tight), revise, and bind once I'm happy with it.\n- Joe had also said an unbound-signatures prototype is acceptable for Friday.\n- The final binding method is not decided.\n\n**Bottom line**\n- Strongly positive about the visual direction. The immediate priority is to test the printed book and refine the language, rather than spend money and lock in a binding before revisions.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "andrew's office hours",
+        "feedback",
+        "week 9"
+      ],
+      "date": "2026-10-28",
+      "dateAdded": "2026-10-28T12:00:00.000Z",
+      "attachments": []
+    },
+    {
+      "id": "thesis-draft-1-residue",
+      "kind": "journal",
+      "title": "Thesis Draft 1: Residue, final PDF draft (Week 9)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Week 9. Thesis Draft 1 of the Residue book, as one PDF: a draft for the final PDF. Follows [[prototype-1-draft-8-residue]]; the feedback on it is in [[andrew-office-hours-feedback-1028]], [[joe-feedback-1027]] and [[andrew-office-hours-feedback-1021]].\n\n**What it is**\n- 408 pages at 378 x 738 pt (trim size), made by joining the two print files from `Residue_final/print`:\n  - pages 1–384 (signatures 1–32)\n  - pages 385–408 (signatures 33–34, the week summary and back)\n- Both exported 29 October.\n",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "residue",
+        "thesis draft 1",
+        "final pdf",
+        "week 9"
+      ],
+      "date": "2026-10-29",
+      "dateAdded": "2026-10-29T15:00:00.000Z",
+      "attachments": [
+        {
+          "id": "att-thesis-draft1-final-pdf",
+          "name": "Thesis Draft 1 — Residue, final PDF draft.pdf",
+          "type": "application/pdf",
+          "size": 35496765,
+          "dataUrl": "Week%209/Thesis%20Draft%201%20%E2%80%94%20Residue%2C%20final%20PDF%20draft.pdf",
+          "isImage": false,
+          "isVideo": false
+        }
+      ]
     }
   ],
   "statusLog": [
