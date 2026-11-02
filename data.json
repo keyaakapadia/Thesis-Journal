@@ -1,7 +1,7 @@
 {
   "app": "thesis-journal",
   "version": 3,
-  "updated": "2026-10-31T12:00:00.000Z",
+  "updated": "2026-11-02T12:00:00.000Z",
   "entries": [
     {
       "id": "w1-256-notes-8k2p1",
@@ -1469,7 +1469,7 @@
       "author": "",
       "publication": "",
       "url": "",
-      "note": "Call with Joe on 23 October. Relates to [[prototype-1-draft-8-residue]] and [[andrew-office-hours-feedback-1021]].\n\n- Never bold sans serif.\n\nThis bears on the typography push from Andrew: simplify headings, labels and navigation so they sit quieter beside the data. Any bold needs a serif face.\n",
+      "note": "Call with Joe on 27 October. Relates to [[prototype-1-draft-8-residue]] and [[andrew-office-hours-feedback-1021]].\n\n- Never bold sans serif.\n\nThis bears on the typography push from Andrew: simplify headings, labels and navigation so they sit quieter beside the data. Any bold needs a serif face.\n",
       "projects": [
         "prototype-1"
       ],
@@ -1479,8 +1479,8 @@
         "typography",
         "week 9"
       ],
-      "date": "2026-10-23",
-      "dateAdded": "2026-10-23T12:00:00.000Z",
+      "date": "2026-10-27",
+      "dateAdded": "2026-10-27T12:00:00.000Z",
       "attachments": []
     },
     {
@@ -1503,7 +1503,7 @@
     },
     {
       "id": "joe-feedback-1027",
-      "kind": "document",
+      "kind": "journal",
       "title": "Feedback from Joe (10/27)",
       "author": "",
       "publication": "",
@@ -1523,7 +1523,7 @@
     },
     {
       "id": "andrew-office-hours-feedback-1028",
-      "kind": "document",
+      "kind": "journal",
       "title": "Andrew’s Office Hours Feedback (10/28)",
       "author": "",
       "publication": "",
@@ -1567,6 +1567,45 @@
           "type": "application/pdf",
           "size": 35496765,
           "dataUrl": "Week%209/Thesis%20Draft%201%20%E2%80%94%20Residue%2C%20final%20PDF%20draft.pdf",
+          "isImage": false,
+          "isVideo": false
+        }
+      ]
+    },
+    {
+      "id": "residue-final-week9",
+      "kind": "journal",
+      "title": "Residue, final PDFs (Week 9)",
+      "author": "",
+      "publication": "",
+      "url": "",
+      "note": "Week 9. The two final print PDFs of Residue, kept as exported: pages 1–384 (signatures 1–32) and pages 385–408 (signatures 33–34, the week summary and back). Joined into one file in [[thesis-draft-1-residue]].",
+      "projects": [
+        "prototype-1"
+      ],
+      "tags": [
+        "residue",
+        "final",
+        "week 9"
+      ],
+      "date": "2026-10-29",
+      "dateAdded": "2026-10-29T16:00:00.000Z",
+      "attachments": [
+        {
+          "id": "att-residue-final-1",
+          "name": "Residue final, 1 of 2, pages 001-384.pdf",
+          "type": "application/pdf",
+          "size": 33774913,
+          "dataUrl": "Week%209/Residue%20final%2C%201%20of%202%2C%20pages%20001-384.pdf",
+          "isImage": false,
+          "isVideo": false
+        },
+        {
+          "id": "att-residue-final-2",
+          "name": "Residue final, 2 of 2, pages 385-408.pdf",
+          "type": "application/pdf",
+          "size": 1726302,
+          "dataUrl": "Week%209/Residue%20final%2C%202%20of%202%2C%20pages%20385-408.pdf",
           "isImage": false,
           "isVideo": false
         }
